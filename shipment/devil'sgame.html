@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devil's Game</title>
+    <style>
+        body {
+            background-color: black;
+            color: red;
+            font-family: 'Creepster', cursive;
+            text-align: center;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .game-container {
+            background-color: #111;
+            border: 2px solid #600;
+            padding: 50px;
+            box-shadow: 0 0 30px 10px red;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+
+        h1.game-title {
+            font-size: 3em;
+            text-shadow: 0 0 10px #900, 0 0 20px #600;
+            margin-bottom: 20px;
+        }
+
+        .question-container {
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+
+        #user-answer {
+            background-color: black;
+            color: red;
+            border: 2px solid red;
+            padding: 10px;
+            font-size: 1.5em;
+            width: calc(100% - 24px);
+            margin-top: 10px;
+        }
+
+        button {
+            background-color: #900;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #600;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #message {
+            font-size: 1.5em;
+            color: white;
+            margin-top: 20px;
+            animation: flicker 1s infinite alternate;
+        }
+
+        #wrong-answer-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px; /* Adjust size as needed */
+            height: auto;
+            display: none; /* Initially hidden */
+            z-index: 10; /* On top of everything */
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.9; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1 class="game-title">Welcome to the Devil's Game</h1>
+        <div class="question-container" id="question"></div>
+        <input type="text" id="user-answer" placeholder="Your answer...">
+        <button onclick="submitAnswer()">Submit</button>
+        <div id="message" class="hidden"></div>
+        <audio id="scary-sound" src="Chin hwa - scaresounds  2024-10-24 00_52.m4a"></audio>
+        <img id="wrong-answer-image" src="wrong-answer-image.png" alt="Scary Image"> <!-- Add your image source here -->
+    </div>
+    
+    <script>
+        const questions = [
+            { question: "Would you kill the one you love to live? (yes/no)", answer: "yes" },
+            { question: "Dare: Say 'Come to me, oh come to me night, I call on you'", answer: "yes" },
+            { question: "Would you sacrifice your friend for eternal life? (yes/no)", answer: "yes" },
+            { question: "Dare: Whisper to the darkness, 'I call you forth, shadows of despair'", answer: "yes" },
+            { question: "Would you betray your family for ultimate power? (yes/no)", answer: "yes" },
+            { question: "Would you willingly invite a demon into your soul? (yes/no)", answer: "yes" },
+            { question: "Dare: Say the name of the one you fear the most three times", answer: "yes" }
+        ];
+
+        let currentQuestion = 0;
+        let imageInterval; // Interval for changing the image
+        const wrongAnswerImage = document.getElementById("wrong-answer-image");
+
+        function showNotification() {
+            alert("This is the Devil's Game. Do not fight, for the Devil will come for you all!");
+        }
+
+        function showQuestion() {
+            if (currentQuestion < questions.length) {
+                document.getElementById("question").innerText = questions[currentQuestion].question;
+            } else {
+                document.getElementById("question").innerText = "You've answered all questions. Thanks for playing!";
+                document.getElementById("user-answer").style.display = "none";
+                document.querySelector("button").style.display = "none";
+            }
+        }
+
+        function submitAnswer() {
+            const userAnswer = document.getElementById("user-answer").value.toLowerCase();
+            const correctAnswer = questions[currentQuestion].answer.toLowerCase();
+
+            if (userAnswer === correctAnswer) {
+                clearInterval(imageInterval); // Stop the image changing
+                wrongAnswerImage.style.display = "none"; // Hide the image
+                document.getElementById("scary-sound").pause(); // Stop the sound
+                document.getElementById("scary-sound").currentTime = 0; // Reset sound
+                currentQuestion++;
+                document.getElementById("user-answer").value = '';
+                showQuestion();
+            } else {
+                scareUser();
+            }
+        }
+
+        function scareUser() {
+            const message = document.getElementById("message");
+            message.innerText = "You've been hacked!";
+            message.classList.remove("hidden");
+            document.getElementById("scary-sound").play();
+            // Simulate phone vibrations
+            if (navigator.vibrate) {
+                navigator.vibrate(2000); // Vibrate for 2 seconds
+            }
+            // Show the wrong answer image
+            wrongAnswerImage.style.display = "block";
+            startImageChange();
+        }
+
+        function startImageChange() {
+            const images = [
+                "images (6).jpeg" ,
+                "images (5).jpeg", // Add more images if needed
+                "images (7).jpeg"
+            ];
+            let index = 0;
+
+            imageInterval = setInterval(() => {
+                index = (index + 1) % images.length;
+                wrongAnswerImage.src = images[index]; // Change image source
+            }, 1000); // Change image every second
+        }
+
+        window.onload = () => {
+            showNotification(); // Show notification on load
+            showQuestion();
+        };
+    </script>
+</body>
+</html>
