@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agreement Notice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f1f1f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-group {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 100%;
+            max-width: 700px;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .form-group:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-group label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .form-group p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .agreement-text {
+            padding: 10px 0;
+            font-size: 14px;
+            color: #777;
+            border-top: 1px solid #ddd;
+        }
+
+        .agreement-text a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .agreement-text a:hover {
+            text-decoration: underline;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .checkbox-container label {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .checkbox-container input[type="checkbox"]:checked + label {
+            font-weight: bold;
+            color: #2ecc71;
+        }
+
+        .checkbox-container input[type="checkbox"]:not(:checked) + label {
+            color: #555;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #3498db;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        @media (max-width: 768px) {
+            .form-group {
+                width: 90%;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-group">
+        <label for="agreementNotice">Agreement Notice</label>
+        <p>This Agreement is made between <span class="highlight">[IMTF Company]</span> ("the Company") and the undersigned ("You," or "the User").</p>
+        <p>By accessing, using, or interacting with the Company's services, products, or websites, you acknowledge that you have read, understood, and agree to be bound by the terms and conditions outlined in this Agreement.</p>
+        <p>This Agreement governs your use of the services provided by the Company and is legally binding.</p>
+        <p>Please review the terms thoroughly. If you do not agree with any part of this Agreement, you should refrain from using or accessing the Company's services.</p>
+        
+        <div class="checkbox-container">
+            <input type="checkbox" id="agreeToTerms" required>
+            <label for="agreeToTerms">I agree to the <a href="form2.html">Terms of Service</a> and <a href="#">Privacy Policy</a>.</label>
+        </div>
+
+        <button id="submitAgreement" disabled>Submit</button>
+    </div>
+
+    <script>
+        const checkbox = document.getElementById('agreeToTerms');
+        const submitButton = document.getElementById('submitAgreement');
+
+        // Enable submit button if checkbox is checked
+        checkbox.addEventListener('change', function() {
+            submitButton.disabled = !checkbox.checked;
+        });
+
+        // Handle form submission (just an example)
+        submitButton.addEventListener('click', function() {
+            if (checkbox.checked) {
+                alert('Agreement successfully submitted!');
+            } else {
+                alert('You must agree to the terms and conditions first.');
+            }
+        });
+    </script>
+
+</body>
+</html>
