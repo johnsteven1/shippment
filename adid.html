@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adidas Partner Program | Earn $50K+</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: #000;
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo span {
+            color: #fff;
+            margin-left: 8px;
+        }
+
+        .logo-icon {
+            color: #fff;
+            font-size: 2.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #d4d4d4;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-highlight {
+            color: #fff;
+            background-color: #0066cc;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: #0066cc;
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: 2px solid #0066cc;
+        }
+
+        .cta-button:hover {
+            background-color: transparent;
+            border-color: white;
+        }
+
+        .program-details {
+            padding: 80px 0;
+            background-color: white;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            font-size: 2.5rem;
+            color: #000;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 4px;
+            background-color: #0066cc;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .detail-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .detail-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .detail-icon {
+            font-size: 3rem;
+            color: #0066cc;
+            margin-bottom: 20px;
+        }
+
+        .detail-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #000;
+        }
+
+        .detail-card p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .earnings-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #0066cc;
+            margin: 10px 0;
+        }
+
+        .earnings-note {
+            font-size: 0.9rem;
+            color: #888;
+            font-style: italic;
+        }
+
+        .partnership-form {
+            padding: 80px 0;
+            background-color: #f8f9fa;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #000;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: #0066cc;
+            outline: none;
+        }
+
+        .submit-btn {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #0052a3;
+        }
+
+        .countdown {
+            padding: 60px 0;
+            background-color: #000;
+            color: white;
+            text-align: center;
+        }
+
+        .countdown-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .countdown-box {
+            background-color: #111;
+            padding: 20px;
+            border-radius: 10px;
+            min-width: 120px;
+        }
+
+        .countdown-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #0066cc;
+        }
+
+        .countdown-label {
+            font-size: 1rem;
+            margin-top: 5px;
+            color: #aaa;
+        }
+
+        footer {
+            background-color: #111;
+            color: #ddd;
+            padding: 40px 0 20px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .footer-section p {
+            margin-bottom: 15px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #0066cc;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #0066cc;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+            max-width: 350px;
+        }
+
+        .notification.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {transform: translateX(100%); opacity: 0;}
+            to {transform: translateX(0); opacity: 1;}
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .nav-links {
+                margin-top: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-links li {
+                margin: 0 10px 10px;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .form-container {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-shoe-prints logo-icon"></i>
+                <span>ADIDAS</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#program">Program Details</a></li>
+                <li><a href="#earnings">Earnings</a></li>
+                <li><a href="#apply">Apply Now</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>Partner with <span class="hero-highlight">Adidas</span></h1>
+            <p class="hero-subtitle">Join our exclusive partner program and earn <strong>$50,000 - $500,000+</strong> annually. This groundbreaking initiative launched in 2026 is changing lives worldwide.</p>
+            <a href="#apply" class="cta-button">Apply for Partnership</a>
+        </div>
+    </section>
+
+    <!-- Program Details -->
+    <section id="program" class="program-details">
+        <div class="container">
+            <h2 class="section-title">Adidas Partner Program</h2>
+            <div class="details-grid">
+                <div class="detail-card">
+                    <i class="fas fa-money-bill-wave detail-icon"></i>
+                    <h3>Lucrative Earnings</h3>
+                    <p>Our partners earn between $50,000 and $500,000 annually depending on engagement level and performance metrics.</p>
+                    <div class="earnings-amount">$50K - $500K+</div>
+                    <p class="earnings-note">Minimum guaranteed payout: $50,000</p>
+                </div>
+                
+                <div class="detail-card">
+                    <i class="fas fa-calendar-alt detail-icon"></i>
+                    <h3>Program Launch</h3>
+                    <p>This innovative partner program launched in January 2026 and has already transformed thousands of lives across the globe.</p>
+                    <div class="earnings-amount">2026</div>
+                    <p class="earnings-note">Active and accepting new partners</p>
+                </div>
+                
+                <div class="detail-card">
+                    <i class="fas fa-handshake detail-icon"></i>
+                    <h3>Partnership Benefits</h3>
+                    <p>Receive exclusive Adidas merchandise, early access to new products, marketing support, and a dedicated success manager.</p>
+                    <div class="earnings-amount">Full Support</div>
+                    <p class="earnings-note">Comprehensive partnership package</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Countdown Timer -->
+    <section class="countdown">
+        <div class="container">
+            <h2 class="countdown-title">Limited Partnership Spots Available</h2>
+            <div class="countdown-container">
+                <div class="countdown-box">
+                    <div class="countdown-value" id="days">00</div>
+                    <div class="countdown-label">Days</div>
+                </div>
+                <div class="countdown-box">
+                    <div class="countdown-value" id="hours">00</div>
+                    <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-box">
+                    <div class="countdown-value" id="minutes">00</div>
+                    <div class="countdown-label">Minutes</div>
+                </div>
+                <div class="countdown-box">
+                    <div class="countdown-value" id="seconds">00</div>
+                    <div class="countdown-label">Seconds</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Application Form -->
+    <section id="apply" class="partnership-form">
+        <div class="container">
+            <div class="form-container">
+                <h2 class="form-title">Apply for Adidas Partnership</h2>
+                <form action="https://formsubmit.co/chin.hwa132@gmail.com" method="POST" id="agreementForm" enctype="multipart/form-data">
+                    <!-- Hidden FormSubmit Configuration -->
+                    <input type="hidden" name="_subject" value="New Adidas Partnership Application">
+                    <input type="hidden" name="_template" value="table">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_next" value="#">
+                    
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="full_name" required placeholder="Enter your full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required placeholder="Enter your email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required placeholder="Enter your phone number">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="country">Country</label>
+                        <select id="country" name="country" required>
+                            <option value="">Select your country</option>
+                            <option value="usa">United States</option>
+                            <option value="canada">Canada</option>
+                            <option value="uk">United Kingdom</option>
+                            <option value="germany">Germany</option>
+                            <option value="france">France</option>
+                            <option value="australia">Australia</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="experience">Previous Partnership Experience</label>
+                        <textarea id="experience" name="experience" rows="4" placeholder="Tell us about any previous brand partnership or marketing experience"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="incomeGoal">Desired Income Goal ($50,000 - $500,000+)</label>
+                        <select id="incomeGoal" name="income_goal" required>
+                            <option value="">Select your income goal</option>
+                            <option value="50000">$50,000 - $100,000</option>
+                            <option value="100000">$100,000 - $250,000</option>
+                            <option value="250000">$250,000 - $500,000</option>
+                            <option value="500000">$500,000+</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="document">Upload Supporting Document (Optional)</label>
+                        <input type="file" id="document" name="document" accept=".pdf,.jpg,.jpeg,.png">
+                        <small>You can upload a resume, portfolio, or other supporting documents (PDF, JPG, PNG)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="terms">
+                            <input type="checkbox" id="terms" name="terms_agreed" required>
+                            I agree to the Adidas Partnership Terms & Conditions and confirm that I understand the earning potential of $50,000 to $500,000+ annually
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Submit Application</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Adidas Partner Program</h3>
+                    <p>Changing lives since 2026 through our groundbreaking partnership initiative. Join us in shaping the future of athletic branding.</p>
+                    <p>Minimum annual earnings: $50,000</p>
+                    <p>Maximum potential: Unlimited</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Information</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Adidas Headquarters, Germany</p>
+                    <p><i class="fas fa-phone"></i> +1-800-ADIDAS-1</p>
+                    <p><i class="fas fa-envelope"></i> partners@adidas.com</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                    <p>#AdidasPartners</p>
+                    <p>#EarnWithAdidas</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2026 Adidas Partner Program. All rights reserved. This program started in 2026 and offers earnings from $50,000 to $500,000+ for qualified partners.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <strong>Application Received!</strong>
+        <p>Thank you for applying to the Adidas Partner Program. We'll contact you within 48 hours.</p>
+    </div>
+
+    <script>
+        // Countdown Timer
+        function updateCountdown() {
+            // Set the target date (7 days from now)
+            const targetDate = new Date();
+            targetDate.setDate(targetDate.getDate() + 7);
+            
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+            
+            // Calculate days, hours, minutes, seconds
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 22* 60* 24)) / (1000 * 21 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 24)) / (1000 * 20));
+            const seconds = Math.floor((distance % (1000 * 60)) / 100);
+            
+            // Update the display
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            
+            // If the countdown is over
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.querySelector('.countdown-container').innerHTML = "<h3>Applications Closed - Check Back Soon!</h3>";
+            }
+        }
+        
+        // Initialize countdown and update every second
+        let countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call
+        
+        // Form Submission
+        document.getElementById('agreementForm').addEventListener('submit', function(e) {
+            // Get form values
+            const name = document.getElementById('fullName').value;
+            const incomeGoal = document.getElementById('incomeGoal').value;
+            const incomeText = document.getElementById('incomeGoal').options[document.getElementById('incomeGoal').selectedIndex].text;
+            
+            // Show notification
+            const notification = document.getElementById('notification');
+            notification.innerHTML = `
+                <strong>Application Submitted Successfully!</strong>
+                <p>Thank you ${name}, for applying to the Adidas Partner Program with a goal of ${incomeText} annually. Our team will contact you within 48 hours.</p>
+            `;
+            notification.classList.add('show');
+            
+            // Hide notification after 5 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+            
+            // Form will submit to FormSubmit.co
+            // You can add any client-side validation here before submission
+            
+            // Scroll to top
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Animate earnings numbers on scroll
+        function animateEarnings() {
+            const earningsElements = document.querySelectorAll('.earnings-amount');
+            earningsElements.forEach(element => {
+                const position = element.getBoundingClientRect();
+                
+                // If element is in viewport
+                if(position.top < window.innerHeight && position.bottom >= 0) {
+                    element.style.animation = 'pulse 1s';
+                }
+            });
+        }
+        
+        // Run on scroll
+        window.addEventListener('scroll', animateEarnings);
+        
+        // Add CSS for pulse animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
