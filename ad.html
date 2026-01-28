@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adidas Auto Cash Plan | Passive Income System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            line-height: 1.6;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), 
+                              url('https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
+        h1, h2, h3, h4, .logo, .cta-button {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles - Adidas Style */
+        header {
+            background: linear-gradient(135deg, #000 0%, #000 100%);
+            color: white;
+            padding: 10px 0;
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #fff;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            text-transform: uppercase;
+        }
+
+        .logo span {
+            color: #fff;
+            margin-left: 10px;
+            position: relative;
+        }
+
+        .logo span:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #000, #fff, #000);
+        }
+
+        .logo-icon {
+            color: #fff;
+            font-size: 2.8rem;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 35px;
+            position: relative;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            padding: 5px 0;
+        }
+
+        .nav-links a:hover {
+            color: #0066cc;
+        }
+
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            background: #fff;
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 102, 204, 0.15)), 
+                        url('https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 120px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -50%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.05) 50%, transparent 70%);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-highlight {
+            color: #0066cc;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 8px 20px;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 10px 0;
+            border: 2px solid #0066cc;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 300;
+            line-height: 1.8;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: #000;
+            color: white;
+            padding: 18px 50px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 0;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: all 0.3s ease;
+            border: 3px solid #fff;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .cta-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+            z-index: -1;
+        }
+
+        .cta-button:hover {
+            background-color: #0066cc;
+            border-color: #0066cc;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 102, 204, 0.4);
+        }
+
+        .cta-button:hover:before {
+            left: 100%;
+        }
+
+        /* Auto Cash Plan Section */
+        .auto-cash-section {
+            padding: 100px 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 70px;
+            font-size: 3rem;
+            color: #fff;
+            position: relative;
+            text-transform: uppercase;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 5px;
+            background: linear-gradient(90deg, #000, #0066cc, #000);
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .plan-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .plan-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0, 102, 204, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plan-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #000, #0066cc, #000);
+        }
+
+        .plan-card:hover {
+            transform: translateY(-15px);
+            border-color: #0066cc;
+            box-shadow: 0 20px 40px rgba(0, 102, 204, 0.3);
+        }
+
+        .plan-card.premium {
+            background: linear-gradient(145deg, rgba(0, 102, 204, 0.2), rgba(0, 0, 0, 0.8));
+            color: white;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #0066cc;
+        }
+
+        .plan-card.premium:before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: 20px;
+            right: -35px;
+            background: #0066cc;
+            color: white;
+            padding: 8px 35px;
+            transform: rotate(45deg);
+            font-size: 0.9rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .plan-icon {
+            font-size: 3.5rem;
+            color: #0066cc;
+            margin-bottom: 25px;
+        }
+
+        .plan-card.premium .plan-icon {
+            color: white;
+        }
+
+        .plan-card h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .plan-price {
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: #0066cc;
+            margin: 25px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .plan-card.premium .plan-price {
+            color: #fff;
+        }
+
+        .plan-features {
+            list-style: none;
+            text-align: left;
+            margin: 30px 0;
+        }
+
+        .plan-features li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ccc;
+        }
+
+        .plan-card.premium .plan-features li {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .plan-features li i {
+            color: #0066cc;
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+
+        .plan-card.premium .plan-features li i {
+            color: #fff;
+        }
+
+        .fee-note {
+            background: linear-gradient(135deg, rgba(0, 102, 204, 0.2), rgba(0, 0, 0, 0.8));
+            border-left: 5px solid #0066cc;
+            padding: 25px;
+            border-radius: 5px;
+            margin: 40px 0;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .fee-note h4 {
+            color: #0066cc;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .fee-note h4 i {
+            margin-right: 10px;
+        }
+
+        /* WhatsApp Button */
+        .whatsapp-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #25D366;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: 2px solid #25D366;
+            margin-top: 20px;
+        }
+
+        .whatsapp-button i {
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        .whatsapp-button:hover {
+            background-color: #128C7E;
+            border-color: #128C7E;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        /* Dashboard Section */
+        .dashboard-section {
+            padding: 100px 0;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .dashboard-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 102, 204, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(0, 102, 204, 0.1), rgba(0, 0, 0, 0.6));
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #0066cc;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .stat-label {
+            color: #ccc;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(0, 102, 204, 0.1));
+            border-radius: 15px;
+            padding: 50px;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            animation: modalSlideIn 0.5s ease;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 102, 204, 0.3);
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #fff;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #0066cc;
+        }
+
+        .modal h3 {
+            margin-bottom: 20px;
+            color: #fff;
+            font-size: 2.2rem;
+            text-transform: uppercase;
+        }
+
+        .modal-form {
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #ccc;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            color: #fff;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: #0066cc;
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 102, 204, 0.5);
+        }
+
+        .form-group input::placeholder {
+            color: #999;
+        }
+
+        /* WhatsApp Success Modal */
+        .whatsapp-success {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .whatsapp-success-content {
+            background: linear-gradient(135deg, rgba(37, 211, 102, 0.1), rgba(0, 0, 0, 0.9));
+            border-radius: 15px;
+            padding: 60px 40px;
+            max-width: 500px;
+            width: 90%;
+            border: 2px solid #25D366;
+            animation: successPulse 2s infinite;
+        }
+
+        @keyframes successPulse {
+            0% { box-shadow: 0 0 20px rgba(37, 211, 102, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(37, 211, 102, 0.6); }
+            100% { box-shadow: 0 0 20px rgba(37, 211, 102, 0.3); }
+        }
+
+        .whatsapp-success i {
+            font-size: 5rem;
+            color: #25D366;
+            margin-bottom: 30px;
+        }
+
+        .whatsapp-success h3 {
+            color: #fff;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        /* WhatsApp Redirect Button */
+        #whatsappRedirect {
+            background-color: #25D366;
+            border-color: #25D366;
+            margin-top: 30px;
+            font-size: 1.4rem;
+            padding: 20px 40px;
+        }
+
+        #whatsappRedirect i {
+            margin-right: 15px;
+        }
+
+        #whatsappRedirect:hover {
+            background-color: #128C7E;
+            border-color: #128C7E;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .plan-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-top: 15px;
+            }
+            
+            .nav-links li {
+                margin: 0 10px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-shoe-prints logo-icon"></i>
+                <span>ADIDAS AUTO CASH</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#plan">Plan Details</a></li>
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>ADIDAS <span class="hero-highlight">AUTO CASH PLAN</span></h1>
+            <p class="hero-subtitle">Earn automatically without inviting anyone. Our revolutionary passive income system generates $50-$5,000+ weekly through automated brand campaigns and system tasks.</p>
+            <button class="cta-button" id="joinNowBtn">Start Earning Now</button>
+        </div>
+    </section>
+
+    <!-- Fee Information Section -->
+    <section class="auto-cash-section">
+        <div class="container">
+            <div class="fee-note">
+                <h4><i class="fas fa-info-circle"></i> IMPORTANT: One-Time Activation Fee Required</h4>
+                <p>To activate your Auto Cash Plan and start earning passive income, a one-time activation fee is required. This fee covers:</p>
+                <ul style="margin-top: 10px; padding-left: 20px;">
+                    <li>System setup and integration</li>
+                    <li>Access to automated earning algorithms</li>
+                    <li>Brand partnership verification</li>
+                    <li>Weekly payout processing</li>
+                </ul>
+                <p style="margin-top: 15px; color: #0066cc; font-weight: bold; font-size: 1.2rem;">Your investment returns 10x-100x in weekly earnings!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Plan Details -->
+    <section id="plan" class="auto-cash-section">
+        <div class="container">
+            <h2 class="section-title">Choose Your Auto Cash Plan</h2>
+            
+            <div class="plan-container">
+                <div class="plan-card">
+                    <div class="plan-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Starter Plan</h3>
+                    <div class="plan-price">$49</div>
+                    <p>Perfect for beginners - Start earning immediately</p>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> Weekly Earnings: $50 - $200</li>
+                        <li><i class="fas fa-check"></i> 5 Daily Automated Tasks</li>
+                        <li><i class="fas fa-check"></i> Basic Brand Campaigns</li>
+                        <li><i class="fas fa-check"></i> Weekly Payouts</li>
+                        <li><i class="fas fa-check"></i> Email Support</li>
+                    </ul>
+                    <button class="cta-button" onclick="selectPlan('starter')">Select Starter</button>
+                </div>
+                
+                <div class="plan-card premium">
+                    <div class="plan-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h3>Premium Plan</h3>
+                    <div class="plan-price">$99</div>
+                    <p>Most Popular - Maximum Earnings Potential</p>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> Weekly Earnings: $200 - $1,000</li>
+                        <li><i class="fas fa-check"></i> 15 Daily Automated Tasks</li>
+                        <li><i class="fas fa-check"></i> Premium Brand Campaigns</li>
+                        <li><i class="fas fa-check"></i> Daily Payouts Available</li>
+                        <li><i class="fas fa-check"></i> Priority 24/7 Support</li>
+                        <li><i class="fas fa-check"></i> Advanced Analytics Dashboard</li>
+                    </ul>
+                    <button class="cta-button" onclick="selectPlan('premium')">Select Premium</button>
+                </div>
+                
+                <div class="plan-card">
+                    <div class="plan-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <h3>Pro Plan</h3>
+                    <div class="plan-price">$199</div>
+                    <p>For serious earners - Unlimited potential</p>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> Weekly Earnings: $500 - $5,000+</li>
+                        <li><i class="fas fa-check"></i> Unlimited Automated Tasks</li>
+                        <li><i class="fas fa-check"></i> Exclusive Brand Partnerships</li>
+                        <li><i class="fas fa-check"></i> Instant Payouts</li>
+                        <li><i class="fas fa-check"></i> Dedicated Account Manager</li>
+                        <li><i class="fas fa-check"></i> Early Access to New Features</li>
+                    </ul>
+                    <button class="cta-button" onclick="selectPlan('pro')">Select Pro</button>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <p style="color: #ccc; font-size: 1.1rem;">Need help choosing? Contact us on WhatsApp:</p>
+                <a href="https://wa.me/1234567890?text=Hello%20Adidas%20Auto%20Cash%20Support,%20I%20need%20help%20choosing%20a%20plan" 
+                   class="whatsapp-button" target="_blank">
+                    <i class="fab fa-whatsapp"></i> Chat with Support
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Join Modal -->
+    <div class="modal" id="joinModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h3>Join Auto Cash Plan</h3>
+            <p style="color: #ccc; margin-bottom: 20px;">Complete the form below to start earning passive income with Adidas</p>
+            
+            <form class="modal-form" id="joinForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" required placeholder="Enter your full name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="userEmail">Email Address</label>
+                    <input type="email" id="userEmail" required placeholder="Enter your email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="phoneNumber">Phone Number</label>
+                    <input type="tel" id="phoneNumber" required placeholder="Enter your phone number with country code">
+                </div>
+                
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <input type="text" id="country" required placeholder="Enter your country">
+                </div>
+                
+                <div class="form-group">
+                    <label for="selectedPlan">Select Plan</label>
+                    <select id="selectedPlan" required>
+                        <option value="">Choose a plan</option>
+                        <option value="starter">Starter Plan - $49</option>
+                        <option value="premium">Premium Plan - $99</option>
+                        <option value="pro">Pro Plan - $199</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="cta-button" style="width: 100%;">
+                    <i class="fab fa-whatsapp"></i> Continue to WhatsApp Payment
+                </button>
+            </form>
+            
+            <p style="margin-top: 20px; font-size: 0.9rem; color: #999;">
+                <i class="fas fa-shield-alt"></i> You will be redirected to WhatsApp to complete your registration securely.
+            </p>
+        </div>
+    </div>
+
+    <!-- WhatsApp Success Modal -->
+    <div class="whatsapp-success" id="whatsappSuccessModal">
+        <div class="whatsapp-success-content">
+            <i class="fab fa-whatsapp"></i>
+            <h3>Redirecting to WhatsApp</h3>
+            <p style="color: #ccc; font-size: 1.2rem; margin-bottom: 20px;">Your information has been prepared. Click the button below to open WhatsApp and send your registration details to our support team.</p>
+            <p style="color: #25D366; font-weight: bold; margin-bottom: 30px;" id="whatsappSummary"></p>
+            <button class="cta-button" id="whatsappRedirect">
+                <i class="fab fa-whatsapp"></i> Open WhatsApp Now
+            </button>
+            <p style="color: #999; margin-top: 20px; font-size: 0.9rem;">If WhatsApp doesn't open automatically, please copy the message and send it manually.</p>
+        </div>
+    </div>
+
+    <script>
+        // WhatsApp Configuration
+        const WHATSAPP_NUMBER = "+2349035786442"; // Replace with actual WhatsApp number
+        
+        // Plan pricing
+        const planPrices = {
+            'starter': '$49',
+            'premium': '$99',
+            'pro': '$199'
+        };
+        
+        // Plan details
+        const planDetails = {
+            'starter': 'Starter Plan ($49)',
+            'premium': 'Premium Plan ($99)',
+            'pro': 'Pro Plan ($199)'
+        };
+        
+        // Initialize dashboard
+        function initializeDashboard() {
+            // Initial values
+            updateDashboard();
+            startEarningsSimulation();
+        }
+        
+        // Update dashboard display
+        function updateDashboard() {
+            // Set initial values with random starting amounts
+            const totalEarnings = Math.floor(Math.random() * 500) + 100;
+            const todayEarnings = Math.floor(Math.random() * 50) + 20;
+            const tasksCompleted = Math.floor(Math.random() * 15) + 5;
+            const nextPayout = Math.floor(Math.random() * 200) + 50;
+            const activeCampaigns = 3;
+            
+            document.getElementById('totalEarnings').textContent = `$${totalEarnings.toFixed(2)}`;
+            document.getElementById('todayEarnings').textContent = `$${todayEarnings.toFixed(2)}`;
+            document.getElementById('tasksCompleted').textContent = tasksCompleted;
+            document.getElementById('nextPayout').textContent = `$${nextPayout.toFixed(2)}`;
+            document.getElementById('activeCampaigns').textContent = activeCampaigns;
+        }
+        
+        // Start earnings simulation
+        function startEarningsSimulation() {
+            setInterval(() => {
+                updateDashboard();
+            }, 5000);
+        }
+        
+        // Plan selection
+        function selectPlan(plan) {
+            const modal = document.getElementById('joinModal');
+            modal.style.display = 'flex';
+            
+            // Set the selected plan in the form
+            document.getElementById('selectedPlan').value = plan;
+        }
+        
+        // Modal functions
+        function closeModal() {
+            document.getElementById('joinModal').style.display = 'none';
+        }
+        
+        // Close success modal
+        function closeSuccessModal() {
+            document.getElementById('whatsappSuccessModal').style.display = 'none';
+        }
+        
+        // Generate WhatsApp message
+        function generateWhatsAppMessage(formData) {
+            const planName = planDetails[formData.plan];
+            const planPrice = planPrices[formData.plan];
+            
+            return `Hello Adidas Auto Cash Support! I want to join the Auto Cash Plan.
+
+My Details:
+📋 Name: ${formData.name}
+📧 Email: ${formData.email}
+📱 Phone: ${formData.phone}
+🌍 Country: ${formData.country}
+💰 Selected Plan: ${planName}
+
+I'm ready to pay the activation fee of ${planPrice} and start earning!
+
+Please guide me through the payment process.`;
+        }
+        
+        // Form submission
+        document.getElementById('joinForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const formData = {
+                name: document.getElementById('fullName').value.trim(),
+                email: document.getElementById('userEmail').value.trim(),
+                phone: document.getElementById('phoneNumber').value.trim(),
+                country: document.getElementById('country').value.trim(),
+                plan: document.getElementById('selectedPlan').value
+            };
+            
+            // Validate form
+            if (!formData.name || !formData.email || !formData.phone || !formData.country || !formData.plan) {
+                alert('Please fill in all fields before continuing.');
+                return;
+            }
+            
+            // Generate WhatsApp message
+            const whatsappMessage = generateWhatsAppMessage(formData);
+            
+            // Encode message for URL
+            const encodedMessage = encodeURIComponent(whatsappMessage);
+            
+            // Create WhatsApp URL
+            const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
+            
+            // Show summary
+            document.getElementById('whatsappSummary').textContent = 
+                `${formData.name} - ${planDetails[formData.plan]} - ${planPrices[formData.plan]}`;
+            
+            // Store the URL for the redirect button
+            const redirectButton = document.getElementById('whatsappRedirect');
+            redirectButton.onclick = function() {
+                window.open(whatsappURL, '_blank');
+                closeSuccessModal();
+                closeModal();
+                this.reset();
+            };
+            
+            // Show success modal
+            document.getElementById('whatsappSuccessModal').style.display = 'flex';
+            
+            // Close join modal
+            closeModal();
+            
+            // Auto-redirect after 5 seconds
+            setTimeout(() => {
+                window.open(whatsappURL, '_blank');
+                closeSuccessModal();
+                document.getElementById('joinForm').reset();
+            }, 5000);
+        });
+        
+        // Join Now button
+        document.getElementById('joinNowBtn').addEventListener('click', () => {
+            document.getElementById('joinModal').style.display = 'flex';
+        });
+        
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const joinModal = document.getElementById('joinModal');
+            const successModal = document.getElementById('whatsappSuccessModal');
+            
+            if (event.target == joinModal) {
+                closeModal();
+            }
+            if (event.target == successModal) {
+                closeSuccessModal();
+            }
+        }
+        
+        // Close success modal with escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeSuccessModal();
+                closeModal();
+            }
+        });
+        
+        // WhatsApp redirect button functionality
+        document.getElementById('whatsappRedirect').addEventListener('click', function() {
+            // This will be set dynamically when the form is submitted
+        });
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializeDashboard);
+        
+        // Add smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
