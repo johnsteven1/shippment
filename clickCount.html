@@ -113,10 +113,6 @@
             background: #f56565;
         }
         
-        .status-ok {
-            background: #68d391;
-        }
-        
         @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.5; }
@@ -382,7 +378,7 @@
             transform: translateY(0);
         }
         
-        /* Health status from first script */
+        /* Health status from first script - ADDED */
         .health {
             position: fixed;
             top: 20px;
@@ -454,7 +450,7 @@
     </style>
 </head>
 <body>
-    <!-- Health status from first script -->
+    <!-- Health status from first script - ADDED -->
     <div class="health">
         Status: <span id="healthStatus">OK</span><br>
         Heartbeat: <span id="heartbeat">0</span>
@@ -584,6 +580,7 @@
                         <input type="checkbox" id="soundEffects">
                         <label for="soundEffects">Sound effects</label>
                     </div>
+                    <!-- NEW CHECKBOXES ADDED -->
                     <div class="checkbox-group">
                         <input type="checkbox" id="useIndexedDB" checked>
                         <label for="useIndexedDB">Use IndexedDB (persistent)</label>
@@ -617,10 +614,12 @@
         </div>
         
         <div class="footer">
+            <!-- UPDATED FOOTER TEXT -->
             <div>📱 Data automatically saved to your device • 🔄 Auto-save enabled • 🤖 Web Worker Active</div>
             <div style="margin-top: 10px; font-size: 0.8rem;">
                 Last saved: <span id="lastSaved">Never</span> | 
                 Storage used: <span id="storageUsed">0 KB</span> |
+                <!-- NEW DB STATUS ADDED -->
                 DB Status: <span id="dbStatus">IndexedDB Ready</span>
             </div>
         </div>
@@ -629,117 +628,72 @@
     <div class="data-status" id="dataStatus"></div>
 
     <script>
-        /* ===============================
-           INDEXEDDB + STORAGE LAYER (from first script)
-        ================================ */
-        const DB_NAME = "automation_db_v2";
-        let db = null;
-
-        function openDB() {
-            return new Promise((resolve, reject) => {
-                const req = indexedDB.open(DB_NAME, 2);
-                req.onupgradeneeded = e => {
-                    const db = e.target.result;
-                    if (!db.objectStoreNames.contains("state")) {
-                        db.createObjectStore("state", { keyPath: "key" });
-                    }
-                    if (!db.objectStoreNames.contains("logs")) {
-                        db.createObjectStore("logs", { keyPath: "id", autoIncrement: true });
-                    }
-                    if (!db.objectStoreNames.contains("history")) {
-                        db.createObjectStore("history", { keyPath: "timestamp" });
-                    }
-                };
-                req.onsuccess = e => {
-                    db = e.target.result;
-                    resolve(db);
-                };
-                req.onerror = () => reject(new Error("IndexedDB initialization failed"));
-            });
-        }
-
-        async function idbSet(key, value) {
-            if (!db) return;
-            try {
-                const tx = db.transaction("state", "readwrite");
-                await tx.objectStore("state").put({ key, value, timestamp: Date.now() });
-                return true;
-            } catch (error) {
-                console.error("IndexedDB set error:", error);
-                return false;
-            }
-        }
-
-        async function idbGet(key) {
-            if (!db) return null;
-            try {
-                const tx = db.transaction("state", "readonly");
-                const q = tx.objectStore("state").get(key);
-                return new Promise(resolve => {
-                    q.onsuccess = () => resolve(q.result ? q.result.value : null);
-                    q.onerror = () => resolve(null);
-                });
-            } catch (error) {
-                console.error("IndexedDB get error:", error);
-                return null;
-            }
-        }
-
-        async function idbLog(message, type = "info") {
-            if (!db) return;
-            try {
-                const tx = db.transaction("logs", "readwrite");
-                await tx.objectStore("logs").put({
-                    message,
-                    type,
-                    timestamp: Date.now()
-                });
-            } catch (error) {
-                console.error("IndexedDB log error:", error);
-            }
-        }
-
-        /* ===============================
-           WEB WORKER TIMER (from first script)
-        ================================ */
+        // ===============================
+        // SIMPLIFIED WEB WORKER
+        // ===============================
         const workerBlob = new Blob([`
             let timer = null;
-            let isRunning = false;
-            
-            onmessage = e => {
-                const { cmd, delay } = e.data;
-                
-                if (cmd === "start") {
+            self.onmessage = function(e) {
+                if (e.data.cmd === "start") {
                     clearInterval(timer);
-                    isRunning = true;
                     timer = setInterval(() => {
-                        if (isRunning) {
-                            postMessage({ type: "tick", timestamp: Date.now() });
-                        }
-                    }, delay);
+                        self.postMessage("tick");
+                    }, e.data.delay);
                 }
-                
-                if (cmd === "stop") {
-                    isRunning = false;
+                if (e.data.cmd === "stop") {
                     clearInterval(timer);
-                    postMessage({ type: "stopped" });
-                }
-                
-                if (cmd === "pause") {
-                    isRunning = false;
-                }
-                
-                if (cmd === "resume") {
-                    isRunning = true;
                 }
             };
         `], { type: "application/javascript" });
 
         const worker = new Worker(URL.createObjectURL(workerBlob));
 
-        /* ===============================
-           STORAGE CONFIGURATION
-        ================================ */
+        // ===============================
+        // SIMPLIFIED INDEXEDDB
+        // ===============================
+        const DB_NAME = "automation_db_v3";
+        let db = null;
+
+        function openDB() {
+            return new Promise((resolve, reject) => {
+                const req = indexedDB.open(DB_NAME, 1);
+                req.onupgradeneeded = (e) => {
+                    db = e.target.result;
+                    if (!db.objectStoreNames.contains("state")) {
+                        db.createObjectStore("state", { keyPath: "key" });
+                    }
+                };
+                req.onsuccess = (e) => {
+                    db = e.target.result;
+                    resolve(db);
+                };
+                req.onerror = () => reject("IndexedDB error");
+            });
+        }
+
+        async function idbSet(key, value) {
+            if (!db) return;
+            return new Promise((resolve) => {
+                const tx = db.transaction("state", "readwrite");
+                tx.objectStore("state").put({ key, value });
+                tx.oncomplete = () => resolve(true);
+                tx.onerror = () => resolve(false);
+            });
+        }
+
+        async function idbGet(key) {
+            if (!db) return null;
+            return new Promise((resolve) => {
+                const tx = db.transaction("state", "readonly");
+                const req = tx.objectStore("state").get(key);
+                req.onsuccess = () => resolve(req.result ? req.result.value : null);
+                req.onerror = () => resolve(null);
+            });
+        }
+
+        // ===============================
+        // EXISTING STORAGE CONFIGURATION
+        // ===============================
         const STORAGE_CONFIG = {
             CLICK_COUNT: 'automation_clicks_v2',
             SETTINGS: 'automation_settings_v2',
@@ -749,9 +703,9 @@
             HISTORY: 'automation_history_v2'
         };
 
-        /* ===============================
-           APPLICATION STATE
-        ================================ */
+        // ===============================
+        // APPLICATION STATE
+        // ===============================
         let state = {
             clickCount: 0,
             automationActive: false,
@@ -763,14 +717,13 @@
             lastClickTime: null,
             autoSaveInterval: null,
             heartbeat: 0,
-            running: false,
             useIndexedDB: true,
             useWebWorker: true
         };
 
-        /* ===============================
-           DOM ELEMENTS
-        ================================ */
+        // ===============================
+        // DOM ELEMENTS
+        // ===============================
         const elements = {
             totalClicks: document.getElementById('totalClicks'),
             status: document.getElementById('status'),
@@ -793,108 +746,42 @@
             heartbeat: document.getElementById('heartbeat')
         };
 
-        /* ===============================
-           INITIALIZATION
-        ================================ */
+        // ===============================
+        // INITIALIZATION
+        // ===============================
         initApplication();
 
         async function initApplication() {
-            await initializeDatabase();
+            try {
+                await openDB();
+                elements.dbStatus.textContent = "IndexedDB Ready";
+                elements.dbStatus.style.color = "#68d391";
+            } catch (error) {
+                elements.dbStatus.textContent = "Using localStorage";
+                elements.dbStatus.style.color = "#f56565";
+            }
+            
             loadAllData();
             updateTargetLink();
             setupEventListeners();
             startAutoSave();
             updateStorageInfo();
             startHeartbeat();
-            showDataStatus('Application loaded with Web Worker & IndexedDB', 'success');
             
-            // Initialize Web Worker
-            worker.onmessage = handleWorkerMessage;
-        }
-
-        async function initializeDatabase() {
-            try {
-                await openDB();
-                elements.dbStatus.textContent = "IndexedDB Ready";
-                elements.dbStatus.style.color = "#68d391";
-                logActivity("IndexedDB initialized successfully", 'success');
-                await idbLog("Application started with IndexedDB");
-            } catch (error) {
-                elements.dbStatus.textContent = "IndexedDB Failed - Using localStorage";
-                elements.dbStatus.style.color = "#f56565";
-                logActivity("IndexedDB failed, falling back to localStorage", 'warning');
-            }
-        }
-
-        function handleWorkerMessage(e) {
-            const { type, timestamp } = e.data;
-            
-            if (type === "tick" && state.automationActive) {
-                handleTick();
-            } else if (type === "stopped") {
-                logActivity("Web Worker timer stopped", 'info');
-            }
-        }
-
-        function handleTick() {
-            if (!state.automationActive) return;
-            
-            const maxClicks = parseInt(document.getElementById('maxClicks').value);
-            let delay = parseFloat(document.getElementById('clickDelay').value) * 1000;
-            
-            // Check if we've reached max clicks
-            if (maxClicks > 0 && state.clickCount >= maxClicks) {
-                logActivity("Maximum clicks reached. Automation stopped.", 'info');
-                stopAutomation();
-                return;
-            }
-            
-            try {
-                // Update link before clicking
-                updateTargetLink();
-                
-                // Simulate click
-                const event = new MouseEvent('click', {
-                    view: window,
-                    bubbles: true,
-                    cancelable: true
-                });
-                
-                elements.testLink.dispatchEvent(event);
-                state.clickCount++;
-                elements.totalClicks.textContent = state.clickCount;
-                state.lastClickTime = Date.now();
-                
-                // Show notification if enabled
-                if (document.getElementById('notifications').checked) {
-                    showNotification(`Click #${state.clickCount} simulated`);
+            // Set up Web Worker message handler
+            worker.onmessage = function(e) {
+                if (e.data === "tick" && state.automationActive) {
+                    performClickOperation();
                 }
-                
-                logActivity(`Click #${state.clickCount} simulated via Web Worker. Opening: ${elements.testLink.href}`, 'success');
-                
-                // Play sound if enabled
-                if (document.getElementById('soundEffects').checked) {
-                    playSound('click');
-                }
-                
-                // Save to IndexedDB if enabled
-                if (state.useIndexedDB && db) {
-                    idbSet("clicks", state.clickCount);
-                }
-                
-                // Save progress
-                saveAllData();
-                
-            } catch (error) {
-                state.failedClicks++;
-                logActivity(`Error on click #${state.clickCount + 1}: ${error.message}`, 'error');
-                updateStatistics();
-            }
+            };
+            
+            logActivity("Application loaded successfully", 'success');
+            showDataStatus('System ready with Web Worker & IndexedDB', 'success');
         }
 
-        /* ===============================
-           HEARTBEAT (from first script)
-        ================================ */
+        // ===============================
+        // HEARTBEAT FUNCTION
+        // ===============================
         function startHeartbeat() {
             setInterval(() => {
                 state.heartbeat++;
@@ -902,28 +789,17 @@
             }, 1000);
         }
 
-        /* ===============================
-           DATA MANAGEMENT
-        ================================ */
-        async function loadAllData() {
+        // ===============================
+        // EXISTING FUNCTIONS WITH UPDATES
+        // ===============================
+        function loadAllData() {
             try {
-                // Try IndexedDB first if enabled
-                if (state.useIndexedDB && db) {
-                    const savedClicks = await idbGet("clicks");
-                    if (savedClicks) {
-                        state.clickCount = parseInt(savedClicks);
-                        elements.totalClicks.textContent = state.clickCount;
-                        elements.savedClicks.textContent = `(Saved: ${state.clickCount})`;
-                        logActivity(`Loaded ${state.clickCount} clicks from IndexedDB`, 'success');
-                    }
-                } else {
-                    // Fallback to localStorage
-                    const savedClicks = localStorage.getItem(STORAGE_CONFIG.CLICK_COUNT);
-                    if (savedClicks) {
-                        state.clickCount = parseInt(savedClicks);
-                        elements.totalClicks.textContent = state.clickCount;
-                        elements.savedClicks.textContent = `(Saved: ${state.clickCount})`;
-                    }
+                // Load click count
+                const savedClicks = localStorage.getItem(STORAGE_CONFIG.CLICK_COUNT);
+                if (savedClicks) {
+                    state.clickCount = parseInt(savedClicks);
+                    elements.totalClicks.textContent = state.clickCount;
+                    elements.savedClicks.textContent = `(Saved: ${state.clickCount})`;
                 }
 
                 // Load settings
@@ -943,7 +819,6 @@
                     document.getElementById('useIndexedDB').checked = settings.useIndexedDB !== false;
                     document.getElementById('useWebWorker').checked = settings.useWebWorker !== false;
                     
-                    // Update state
                     state.useIndexedDB = document.getElementById('useIndexedDB').checked;
                     state.useWebWorker = document.getElementById('useWebWorker').checked;
                 }
@@ -983,6 +858,17 @@
                     }
                 }
 
+                // Try to load from IndexedDB
+                if (state.useIndexedDB && db) {
+                    idbGet("clicks").then(savedClicks => {
+                        if (savedClicks) {
+                            state.clickCount = parseInt(savedClicks);
+                            elements.totalClicks.textContent = state.clickCount;
+                            elements.savedClicks.textContent = `(Saved: ${state.clickCount})`;
+                        }
+                    });
+                }
+
                 logActivity("All data loaded from persistent storage", 'success');
             } catch (error) {
                 console.error("Error loading data:", error);
@@ -990,7 +876,7 @@
             }
         }
 
-        async function saveAllData() {
+        function saveAllData() {
             try {
                 // Update state from checkboxes
                 state.useIndexedDB = document.getElementById('useIndexedDB').checked;
@@ -998,11 +884,10 @@
 
                 // Save to IndexedDB if enabled
                 if (state.useIndexedDB && db) {
-                    await idbSet("clicks", state.clickCount);
-                    await idbSet("lastUpdated", Date.now());
+                    idbSet("clicks", state.clickCount);
                 }
 
-                // Also save to localStorage for backup
+                // Save to localStorage
                 localStorage.setItem(STORAGE_CONFIG.CLICK_COUNT, state.clickCount.toString());
 
                 // Save settings
@@ -1051,10 +936,7 @@
                 localStorage.setItem('last_saved_timestamp', now.toString());
                 elements.lastSaved.textContent = new Date(now).toLocaleTimeString();
 
-                // Update storage info
                 updateStorageInfo();
-
-                // Show save confirmation
                 showDataStatus('Data saved successfully', 'success');
             } catch (error) {
                 console.error("Error saving data:", error);
@@ -1062,61 +944,13 @@
             }
         }
 
-        /* ===============================
-           AUTOMATION CONTROL
-        ================================ */
-        function startAutomation() {
-            if (state.automationActive) return;
-            
-            state.automationActive = true;
-            state.sessionStartTime = Date.now();
-            
-            // Update health status
-            elements.healthStatus.textContent = "RUNNING";
-            elements.healthStatus.style.color = "#68d391";
-            
-            // Update UI
-            elements.startBtn.disabled = true;
-            elements.stopBtn.disabled = false;
-            elements.status.innerHTML = '<span class="status-indicator status-running"></span> Running';
-            elements.status.style.color = '#48bb78';
-            
-            logActivity("Automation started successfully", 'success');
-            
-            // Start session timer
-            state.sessionInterval = setInterval(updateSessionTimer, 1000);
-            
-            // Save session state
-            saveAllData();
-            
-            // Show notification if enabled
-            if (document.getElementById('notifications').checked) {
-                showNotification("Automation started");
-            }
-            
-            // Start timer based on selected method
-            if (state.useWebWorker) {
-                const delay = parseFloat(document.getElementById('clickDelay').value) * 1000;
-                worker.postMessage({ cmd: "start", delay: delay });
-                logActivity("Web Worker timer started", 'success');
-            } else {
-                // Use traditional setTimeout method
-                const initialDelay = 2000; // 2 second delay before first click
-                state.automationTimeout = setTimeout(legacySimulateClick, initialDelay);
-            }
-        }
-
-        function legacySimulateClick() {
+        // ===============================
+        // CLICK OPERATION FUNCTION
+        // ===============================
+        function performClickOperation() {
             if (!state.automationActive) return;
             
             const maxClicks = parseInt(document.getElementById('maxClicks').value);
-            let delay = parseFloat(document.getElementById('clickDelay').value) * 1000;
-            
-            // Add random variation if enabled
-            if (document.getElementById('randomDelay').checked) {
-                const variation = delay * 0.1; // ±10%
-                delay += (Math.random() * variation * 2) - variation;
-            }
             
             // Check if we've reached max clicks
             if (maxClicks > 0 && state.clickCount >= maxClicks) {
@@ -1156,19 +990,70 @@
                 // Save progress
                 saveAllData();
                 
-                // Schedule next click
-                if (state.automationActive) {
-                    state.automationTimeout = setTimeout(legacySimulateClick, delay);
-                }
             } catch (error) {
                 state.failedClicks++;
                 logActivity(`Error on click #${state.clickCount + 1}: ${error.message}`, 'error');
                 updateStatistics();
-                
-                // Retry after error delay
-                if (state.automationActive) {
-                    state.automationTimeout = setTimeout(legacySimulateClick, 5000); // 5 second delay on error
-                }
+            }
+        }
+
+        // ===============================
+        // AUTOMATION CONTROL
+        // ===============================
+        function startAutomation() {
+            if (state.automationActive) return;
+            
+            state.automationActive = true;
+            state.sessionStartTime = Date.now();
+            
+            // Update health status
+            elements.healthStatus.textContent = "RUNNING";
+            elements.healthStatus.style.color = "#68d391";
+            
+            // Update UI
+            elements.startBtn.disabled = true;
+            elements.stopBtn.disabled = false;
+            elements.status.innerHTML = '<span class="status-indicator status-running"></span> Running';
+            elements.status.style.color = '#48bb78';
+            
+            logActivity("Automation started successfully", 'success');
+            
+            // Start session timer
+            state.sessionInterval = setInterval(updateSessionTimer, 1000);
+            
+            // Save session state
+            saveAllData();
+            
+            // Show notification if enabled
+            if (document.getElementById('notifications').checked) {
+                showNotification("Automation started");
+            }
+            
+            // Start automation based on selected method
+            if (state.useWebWorker) {
+                const delay = parseFloat(document.getElementById('clickDelay').value) * 1000;
+                worker.postMessage({ cmd: "start", delay: delay });
+                logActivity("Web Worker timer started", 'success');
+            } else {
+                // Use traditional setTimeout method
+                const initialDelay = 2000;
+                state.automationTimeout = setTimeout(function runClick() {
+                    if (!state.automationActive) return;
+                    
+                    performClickOperation();
+                    
+                    // Calculate next delay
+                    let delay = parseFloat(document.getElementById('clickDelay').value) * 1000;
+                    if (document.getElementById('randomDelay').checked) {
+                        const variation = delay * 0.1;
+                        delay += (Math.random() * variation * 2) - variation;
+                    }
+                    
+                    // Schedule next click
+                    if (state.automationActive) {
+                        state.automationTimeout = setTimeout(runClick, delay);
+                    }
+                }, initialDelay);
             }
         }
 
@@ -1223,9 +1108,9 @@
             }
         }
 
-        /* ===============================
-           HELPER FUNCTIONS (remaining functions from second script)
-        ================================ */
+        // ===============================
+        // EXISTING HELPER FUNCTIONS
+        // ===============================
         function updateTargetLink() {
             const url = document.getElementById('targetUrl').value;
             const target = document.getElementById('openInNewTab').value;
@@ -1233,12 +1118,10 @@
             elements.testLink.href = url;
             elements.testLink.target = target;
             
-            // Update preview text
             const targetText = target === '_blank' ? 'New Tab' : 
                              target === '_self' ? 'Same Tab' : 'Parent Frame';
             elements.linkTargetPreview.textContent = targetText;
             
-            // Save settings
             if (document.getElementById('autoSave').checked) {
                 saveAllData();
             }
@@ -1258,22 +1141,14 @@
             
             elements.activityLog.prepend(logEntry);
             
-            // Keep log manageable
             if (elements.activityLog.children.length > 100) {
                 elements.activityLog.removeChild(elements.activityLog.lastChild);
             }
             
-            // Save to IndexedDB if enabled
-            if (state.useIndexedDB && db) {
-                idbLog(message, type);
-            }
-            
-            // Play sound if enabled
             if (document.getElementById('soundEffects').checked && type === 'error') {
                 playSound('error');
             }
             
-            // Auto-save logs if enabled
             if (document.getElementById('saveLogs').checked && document.getElementById('autoSave').checked) {
                 localStorage.setItem(STORAGE_CONFIG.LOGS, elements.activityLog.innerHTML);
             }
@@ -1284,7 +1159,6 @@
                 const elapsed = Math.floor((Date.now() - state.sessionStartTime) / 1000);
                 elements.sessionTime.textContent = `${elapsed}s`;
                 
-                // Update total uptime display
                 const totalUptime = state.totalUptime + elapsed;
                 const hours = Math.floor(totalUptime / 3600);
                 const minutes = Math.floor((totalUptime % 3600) / 60);
@@ -1294,14 +1168,12 @@
         }
 
         function updateStatistics() {
-            // Update success rate
             const totalAttempts = state.clickCount + state.failedClicks;
             const successRate = totalAttempts > 0 ? 
                 Math.round((state.clickCount / totalAttempts) * 100) : 100;
             elements.successRate.textContent = `${successRate}%`;
             elements.failedClicks.textContent = `Failed: ${state.failedClicks}`;
             
-            // Update total time
             const totalTime = state.totalUptime;
             const hours = Math.floor(totalTime / 3600);
             const minutes = Math.floor((totalTime % 3600) / 60);
@@ -1389,7 +1261,6 @@
                     try {
                         const data = JSON.parse(event.target.result);
                         
-                        // Import statistics
                         if (data.statistics) {
                             state.clickCount = parseInt(data.statistics.clickCount) || 0;
                             state.failedClicks = parseInt(data.statistics.failedClicks) || 0;
@@ -1399,7 +1270,6 @@
                             updateStatistics();
                         }
                         
-                        // Import settings
                         if (data.settings) {
                             document.getElementById('clickDelay').value = data.settings.clickDelay || 5;
                             document.getElementById('maxClicks').value = data.settings.maxClicks || 50;
@@ -1412,7 +1282,6 @@
                             updateTargetLink();
                         }
                         
-                        // Import logs
                         if (data.logs) {
                             elements.activityLog.innerHTML = data.logs;
                         }
@@ -1462,17 +1331,16 @@
             state.autoSaveInterval = setInterval(() => {
                 if (document.getElementById('autoSave').checked) {
                     saveAllData();
-                    // Flash the save indicator
                     showDataStatus('Auto-saved', 'info', 1000);
                 }
-            }, 30000); // Auto-save every 30 seconds
+            }, 30000);
         }
 
         function updateStorageInfo() {
             let totalSize = 0;
             for (let key in localStorage) {
                 if (localStorage.hasOwnProperty(key)) {
-                    totalSize += localStorage[key].length * 2; // Approximate size in bytes
+                    totalSize += localStorage[key].length * 2;
                 }
             }
             elements.storageUsed.textContent = `${(totalSize / 1024).toFixed(2)} KB`;
@@ -1546,7 +1414,6 @@
         }
 
         function setupEventListeners() {
-            // Settings change listeners
             document.getElementById('targetUrl').addEventListener('input', updateTargetLink);
             document.getElementById('openInNewTab').addEventListener('change', updateTargetLink);
             
@@ -1560,7 +1427,6 @@
                 saveAllData();
             });
             
-            // Advanced settings listeners
             document.getElementById('autoSave').addEventListener('change', function() {
                 if (this.checked) {
                     startAutoSave();
@@ -1574,9 +1440,6 @@
             
             document.getElementById('useIndexedDB').addEventListener('change', function() {
                 state.useIndexedDB = this.checked;
-                if (this.checked && !db) {
-                    initializeDatabase();
-                }
                 logActivity(`IndexedDB ${this.checked ? 'enabled' : 'disabled'}`, 'info');
                 saveAllData();
             });
@@ -1587,9 +1450,7 @@
                 saveAllData();
             });
             
-            // Keyboard shortcuts
             document.addEventListener('keydown', function(e) {
-                // Space to toggle automation
                 if (e.code === 'Space' && !e.target.matches('input, textarea, select')) {
                     e.preventDefault();
                     if (state.automationActive) {
@@ -1598,35 +1459,29 @@
                         startAutomation();
                     }
                 }
-                // Ctrl/Cmd + S to start
                 if ((e.ctrlKey || e.metaKey) && e.key === 's') {
                     e.preventDefault();
                     startAutomation();
                 }
-                // Ctrl/Cmd + P to stop
                 if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
                     e.preventDefault();
                     stopAutomation();
                 }
-                // Escape to stop
                 if (e.key === 'Escape') {
                     stopAutomation();
                 }
-                // Ctrl/Cmd + E to export
                 if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
                     e.preventDefault();
                     exportData();
                 }
             });
             
-            // Visibility change handling
             document.addEventListener('visibilitychange', function() {
                 if (document.hidden && state.automationActive) {
                     logActivity("Browser tab hidden - automation continues in background", 'info');
                 }
             });
             
-            // Before unload warning
             window.addEventListener('beforeunload', function(e) {
                 if (state.automationActive) {
                     e.preventDefault();
@@ -1640,4 +1495,4 @@
         logActivity("Advanced Automation Tool initialized with Web Worker & IndexedDB", 'success');
     </script>
 </body>
-</html>
+    </html>
