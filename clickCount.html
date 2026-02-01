@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Advanced Educational Automation Tool</title>
     <style>
+        /* All existing CSS remains exactly the same */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -396,6 +397,107 @@
             color: #fff;
         }
         
+        /* Permission dialog styles */
+        .permission-dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .permission-box {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .permission-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .permission-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+        
+        .permission-text {
+            color: #718096;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        
+        .permission-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .permission-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            min-width: 120px;
+        }
+        
+        #grantPermissionBtn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+        }
+        
+        #denyPermissionBtn {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .permission-features {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .permission-features ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .permission-features li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .permission-features li:before {
+            content: "✓";
+            color: #48bb78;
+            font-weight: bold;
+        }
+        
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -427,6 +529,19 @@
                 margin-bottom: 20px;
                 text-align: center;
             }
+            
+            .permission-box {
+                padding: 25px;
+                width: 95%;
+            }
+            
+            .permission-buttons {
+                flex-direction: column;
+            }
+            
+            .permission-btn {
+                width: 100%;
+            }
         }
         
         /* Scrollbar styling */
@@ -450,6 +565,38 @@
     </style>
 </head>
 <body>
+    <!-- Permission Dialog - ADDED -->
+    <div class="permission-dialog" id="permissionDialog">
+        <div class="permission-box">
+            <div class="permission-icon">🔒</div>
+            <h2 class="permission-title">Permission Required</h2>
+            <p class="permission-text">
+                This educational automation tool requires certain permissions to function properly. 
+                Please review and grant the permissions below to enable all features.
+            </p>
+            
+            <div class="permission-features">
+                <ul>
+                    <li>Persistent data storage (IndexedDB & localStorage)</li>
+                    <li>Desktop notifications for automation status</li>
+                    <li>Browser automation capabilities</li>
+                    <li>Background processing with Web Workers</li>
+                    <li>Cross-tab communication for session management</li>
+                </ul>
+            </div>
+            
+            <p class="permission-text" style="font-size: 0.9rem;">
+                <strong>Note:</strong> All data is stored locally on your device. No data is sent to external servers.
+                This tool is for educational purposes only.
+            </p>
+            
+            <div class="permission-buttons">
+                <button class="permission-btn" id="grantPermissionBtn">Grant All Permissions</button>
+                <button class="permission-btn" id="denyPermissionBtn">Continue with Limited Features</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Health status from first script - ADDED -->
     <div class="health">
         Status: <span id="healthStatus">OK</span><br>
@@ -493,23 +640,23 @@
             </div>
             
             <div class="buttons">
-                <button id="startBtn" onclick="startAutomation()">
+                <button id="startBtn">
                     <span class="btn-icon">▶</span>
                     Start Automation
                 </button>
-                <button id="stopBtn" onclick="stopAutomation()" disabled>
+                <button id="stopBtn" disabled>
                     <span class="btn-icon">⏸</span>
                     Stop Automation
                 </button>
-                <button id="resetBtn" onclick="resetStats()">
+                <button id="resetBtn">
                     <span class="btn-icon">🔄</span>
                     Reset Stats
                 </button>
-                <button class="storage-btn" onclick="exportData()">
+                <button class="storage-btn" id="exportBtn">
                     <span class="btn-icon">💾</span>
                     Export Data
                 </button>
-                <button class="storage-btn" onclick="importData()">
+                <button class="storage-btn" id="importBtn">
                     <span class="btn-icon">📥</span>
                     Import Data
                 </button>
@@ -551,7 +698,7 @@
             </div>
             
             <div class="advanced-section">
-                <div class="advanced-header" onclick="toggleAdvanced()">
+                <div class="advanced-header" id="advancedHeader">
                     <h3>⚙️ Advanced Settings</h3>
                     <span id="advancedToggle">▼</span>
                 </div>
@@ -580,7 +727,6 @@
                         <input type="checkbox" id="soundEffects">
                         <label for="soundEffects">Sound effects</label>
                     </div>
-                    <!-- NEW CHECKBOXES ADDED -->
                     <div class="checkbox-group">
                         <input type="checkbox" id="useIndexedDB" checked>
                         <label for="useIndexedDB">Use IndexedDB (persistent)</label>
@@ -606,7 +752,7 @@
         <div class="log-container">
             <div class="log-header">
                 <h3>📋 Activity Log</h3>
-                <button onclick="clearLogs()" style="padding: 8px 15px; font-size: 0.9rem;">Clear Logs</button>
+                <button id="clearLogsBtn" style="padding: 8px 15px; font-size: 0.9rem;">Clear Logs</button>
             </div>
             <div class="log" id="activityLog">
                 <!-- Log entries will appear here -->
@@ -614,13 +760,11 @@
         </div>
         
         <div class="footer">
-            <!-- UPDATED FOOTER TEXT -->
             <div>📱 Data automatically saved to your device • 🔄 Auto-save enabled • 🤖 Web Worker Active</div>
             <div style="margin-top: 10px; font-size: 0.8rem;">
                 Last saved: <span id="lastSaved">Never</span> | 
                 Storage used: <span id="storageUsed">0 KB</span> |
-                <!-- NEW DB STATUS ADDED -->
-                DB Status: <span id="dbStatus">IndexedDB Ready</span>
+                DB Status: <span id="dbStatus">Waiting for permissions...</span>
             </div>
         </div>
     </div>
@@ -629,870 +773,969 @@
 
     <script>
         // ===============================
-        // SIMPLIFIED WEB WORKER
+        // CLASS-BASED AUTOMATION SYSTEM
         // ===============================
-        const workerBlob = new Blob([`
-            let timer = null;
-            self.onmessage = function(e) {
-                if (e.data.cmd === "start") {
-                    clearInterval(timer);
-                    timer = setInterval(() => {
-                        self.postMessage("tick");
-                    }, e.data.delay);
+        class AutomationTool {
+            constructor() {
+                this.initialized = false;
+                this.permissions = {
+                    storage: false,
+                    notifications: false,
+                    worker: false,
+                    automation: false
+                };
+                
+                this.state = {
+                    clickCount: 0,
+                    automationActive: false,
+                    automationTimeout: null,
+                    sessionStartTime: null,
+                    sessionInterval: null,
+                    totalUptime: 0,
+                    failedClicks: 0,
+                    lastClickTime: null,
+                    autoSaveInterval: null,
+                    heartbeat: 0,
+                    useIndexedDB: true,
+                    useWebWorker: true
+                };
+                
+                this.STORAGE_CONFIG = {
+                    CLICK_COUNT: 'automation_clicks_v3',
+                    SETTINGS: 'automation_settings_v3',
+                    LOGS: 'automation_logs_v3',
+                    SESSION: 'automation_session_v3',
+                    STATS: 'automation_stats_v3',
+                    PERMISSIONS: 'automation_permissions_v3'
+                };
+                
+                this.init();
+            }
+            
+            async init() {
+                // Show permission dialog first
+                this.showPermissionDialog();
+                
+                // Initialize DOM elements reference
+                this.elements = {
+                    totalClicks: document.getElementById('totalClicks'),
+                    status: document.getElementById('status'),
+                    sessionTime: document.getElementById('sessionTime'),
+                    activityLog: document.getElementById('activityLog'),
+                    startBtn: document.getElementById('startBtn'),
+                    stopBtn: document.getElementById('stopBtn'),
+                    testLink: document.getElementById('testLink'),
+                    savedClicks: document.getElementById('savedClicks'),
+                    uptime: document.getElementById('uptime'),
+                    totalTime: document.getElementById('totalTime'),
+                    successRate: document.getElementById('successRate'),
+                    failedClicks: document.getElementById('failedClicks'),
+                    lastSaved: document.getElementById('lastSaved'),
+                    storageUsed: document.getElementById('storageUsed'),
+                    dataStatus: document.getElementById('dataStatus'),
+                    linkTargetPreview: document.getElementById('linkTargetPreview'),
+                    dbStatus: document.getElementById('dbStatus'),
+                    healthStatus: document.getElementById('healthStatus'),
+                    heartbeat: document.getElementById('heartbeat')
+                };
+                
+                // Setup event listeners
+                this.setupEventListeners();
+                
+                // Initialize Web Worker
+                this.initWebWorker();
+                
+                // Start heartbeat
+                this.startHeartbeat();
+                
+                this.initialized = true;
+            }
+            
+            showPermissionDialog() {
+                const dialog = document.getElementById('permissionDialog');
+                
+                document.getElementById('grantPermissionBtn').onclick = () => {
+                    this.grantAllPermissions();
+                    dialog.style.display = 'none';
+                    this.afterPermissionGranted();
+                };
+                
+                document.getElementById('denyPermissionBtn').onclick = () => {
+                    this.continueWithLimitedFeatures();
+                    dialog.style.display = 'none';
+                    this.afterPermissionGranted();
+                };
+                
+                dialog.style.display = 'flex';
+            }
+            
+            async grantAllPermissions() {
+                try {
+                    // Request notification permission
+                    if ('Notification' in window) {
+                        const permission = await Notification.requestPermission();
+                        this.permissions.notifications = permission === 'granted';
+                    }
+                    
+                    // Test IndexedDB
+                    this.permissions.storage = await this.testStoragePermissions();
+                    
+                    // Web Worker permission (implicit)
+                    this.permissions.worker = true;
+                    
+                    // Automation permission
+                    this.permissions.automation = true;
+                    
+                    this.log('All permissions granted successfully', 'success');
+                    this.showDataStatus('All permissions granted', 'success');
+                    
+                    // Save permissions
+                    this.savePermissions();
+                    
+                } catch (error) {
+                    this.log(`Permission error: ${error.message}`, 'error');
+                    this.continueWithLimitedFeatures();
                 }
-                if (e.data.cmd === "stop") {
-                    clearInterval(timer);
+            }
+            
+            continueWithLimitedFeatures() {
+                this.permissions = {
+                    storage: false, // Use sessionStorage instead
+                    notifications: false,
+                    worker: false, // Use setTimeout instead
+                    automation: true // Basic automation still works
+                };
+                
+                this.log('Continuing with limited features', 'warning');
+                this.showDataStatus('Using limited features mode', 'warning');
+                
+                // Update UI to reflect limited mode
+                document.getElementById('useIndexedDB').checked = false;
+                document.getElementById('useIndexedDB').disabled = true;
+                document.getElementById('notifications').checked = false;
+                document.getElementById('notifications').disabled = true;
+                document.getElementById('useWebWorker').checked = false;
+                document.getElementById('useWebWorker').disabled = true;
+                
+                this.savePermissions();
+            }
+            
+            async testStoragePermissions() {
+                try {
+                    // Test localStorage
+                    const testKey = 'storage_test_' + Date.now();
+                    localStorage.setItem(testKey, 'test');
+                    localStorage.removeItem(testKey);
+                    
+                    // Test IndexedDB
+                    const dbRequest = indexedDB.open('test_db', 1);
+                    return new Promise((resolve) => {
+                        dbRequest.onsuccess = () => {
+                            indexedDB.deleteDatabase('test_db');
+                            resolve(true);
+                        };
+                        dbRequest.onerror = () => resolve(false);
+                        dbRequest.onblocked = () => resolve(false);
+                    });
+                } catch {
+                    return false;
                 }
-            };
-        `], { type: "application/javascript" });
+            }
+            
+            savePermissions() {
+                if (this.permissions.storage) {
+                    localStorage.setItem(this.STORAGE_CONFIG.PERMISSIONS, 
+                        JSON.stringify(this.permissions));
+                }
+            }
+            
+            loadPermissions() {
+                try {
+                    const saved = localStorage.getItem(this.STORAGE_CONFIG.PERMISSIONS);
+                    if (saved) {
+                        this.permissions = JSON.parse(saved);
+                        return true;
+                    }
+                } catch (error) {
+                    console.error('Error loading permissions:', error);
+                }
+                return false;
+            }
+            
+            afterPermissionGranted() {
+                // Initialize based on granted permissions
+                this.state.useIndexedDB = this.permissions.storage && 
+                    document.getElementById('useIndexedDB').checked;
+                this.state.useWebWorker = this.permissions.worker && 
+                    document.getElementById('useWebWorker').checked;
+                
+                // Load data if storage is permitted
+                if (this.permissions.storage) {
+                    this.loadAllData();
+                }
+                
+                // Update UI
+                this.updateTargetLink();
+                this.updateStorageInfo();
+                
+                // Enable auto-save if permitted
+                if (this.permissions.storage && document.getElementById('autoSave').checked) {
+                    this.startAutoSave();
+                }
+                
+                this.log('Automation Tool initialized with granted permissions', 'success');
+            }
+            
+            initWebWorker() {
+                if (!this.permissions.worker || !this.state.useWebWorker) {
+                    this.log('Web Worker not available, using fallback timer', 'warning');
+                    return;
+                }
+                
+                try {
+                    const workerBlob = new Blob([`
+                        let timer = null;
+                        self.onmessage = function(e) {
+                            if (e.data.cmd === "start") {
+                                clearInterval(timer);
+                                timer = setInterval(() => {
+                                    self.postMessage("tick");
+                                }, e.data.delay);
+                            }
+                            if (e.data.cmd === "stop") {
+                                clearInterval(timer);
+                            }
+                        };
+                    `], { type: "application/javascript" });
+                    
+                    this.worker = new Worker(URL.createObjectURL(workerBlob));
+                    this.worker.onmessage = (e) => {
+                        if (e.data === "tick" && this.state.automationActive) {
+                            this.performClickOperation();
+                        }
+                    };
+                    
+                    this.log('Web Worker initialized successfully', 'success');
+                } catch (error) {
+                    this.log(`Web Worker error: ${error.message}`, 'error');
+                    this.state.useWebWorker = false;
+                    document.getElementById('useWebWorker').checked = false;
+                }
+            }
+            
+            // ===============================
+            // EXISTING METHODS PORTED TO CLASS
+            // ===============================
+            
+            log(message, type = 'info') {
+                const timestamp = new Date().toLocaleTimeString();
+                const logEntry = document.createElement('div');
+                logEntry.className = 'log-entry';
+                
+                const typeText = type.charAt(0).toUpperCase() + type.slice(1);
+                logEntry.innerHTML = `
+                    <span class="log-time">${timestamp}</span>
+                    <span class="log-type log-type-${type}">${typeText}</span>
+                    <span class="log-message">${message}</span>
+                `;
+                
+                this.elements.activityLog.prepend(logEntry);
+                
+                if (this.elements.activityLog.children.length > 100) {
+                    this.elements.activityLog.removeChild(this.elements.activityLog.lastChild);
+                }
+                
+                if (document.getElementById('saveLogs').checked && 
+                    this.permissions.storage && 
+                    document.getElementById('autoSave').checked) {
+                    localStorage.setItem(this.STORAGE_CONFIG.LOGS, this.elements.activityLog.innerHTML);
+                }
+            }
+            
+            showDataStatus(message, type = 'info', duration = 3000) {
+                this.elements.dataStatus.textContent = message;
+                this.elements.dataStatus.style.background = type === 'success' ? '#48bb78' : 
+                                                           type === 'error' ? '#f56565' : 
+                                                           type === 'warning' ? '#ed8936' : '#4299e1';
+                
+                this.elements.dataStatus.classList.add('show');
+                
+                setTimeout(() => {
+                    this.elements.dataStatus.classList.remove('show');
+                }, duration);
+            }
+            
+            async loadAllData() {
+                if (!this.permissions.storage) return;
+                
+                try {
+                    // Load click count
+                    const savedClicks = localStorage.getItem(this.STORAGE_CONFIG.CLICK_COUNT);
+                    if (savedClicks) {
+                        this.state.clickCount = parseInt(savedClicks);
+                        this.elements.totalClicks.textContent = this.state.clickCount;
+                        this.elements.savedClicks.textContent = `(Saved: ${this.state.clickCount})`;
+                    }
 
-        const worker = new Worker(URL.createObjectURL(workerBlob));
+                    // Load settings
+                    const savedSettings = localStorage.getItem(this.STORAGE_CONFIG.SETTINGS);
+                    if (savedSettings) {
+                        const settings = JSON.parse(savedSettings);
+                        document.getElementById('clickDelay').value = settings.clickDelay || 5;
+                        document.getElementById('maxClicks').value = settings.maxClicks || 50;
+                        document.getElementById('targetUrl').value = settings.targetUrl || 'https://example.com';
+                        document.getElementById('openInNewTab').value = settings.openInNewTab || '_blank';
+                        document.getElementById('autoResume').checked = settings.autoResume !== false;
+                        document.getElementById('saveLogs').checked = settings.saveLogs !== false;
+                        document.getElementById('notifications').checked = settings.notifications !== false;
+                        document.getElementById('randomDelay').checked = settings.randomDelay !== false;
+                        document.getElementById('autoSave').checked = settings.autoSave !== false;
+                        document.getElementById('soundEffects').checked = settings.soundEffects || false;
+                        document.getElementById('useIndexedDB').checked = settings.useIndexedDB !== false;
+                        document.getElementById('useWebWorker').checked = settings.useWebWorker !== false;
+                    }
 
-        // ===============================
-        // SIMPLIFIED INDEXEDDB
-        // ===============================
-        const DB_NAME = "automation_db_v3";
-        let db = null;
+                    // Load statistics
+                    const savedStats = localStorage.getItem(this.STORAGE_CONFIG.STATS);
+                    if (savedStats) {
+                        const stats = JSON.parse(savedStats);
+                        this.state.totalUptime = stats.totalUptime || 0;
+                        this.state.failedClicks = stats.failedClicks || 0;
+                        this.updateStatistics();
+                    }
 
-        function openDB() {
-            return new Promise((resolve, reject) => {
-                const req = indexedDB.open(DB_NAME, 1);
-                req.onupgradeneeded = (e) => {
-                    db = e.target.result;
-                    if (!db.objectStoreNames.contains("state")) {
-                        db.createObjectStore("state", { keyPath: "key" });
+                    // Load logs if enabled
+                    if (document.getElementById('saveLogs').checked) {
+                        const savedLogs = localStorage.getItem(this.STORAGE_CONFIG.LOGS);
+                        if (savedLogs) {
+                            this.elements.activityLog.innerHTML = savedLogs;
+                        }
+                    }
+
+                    // Load last saved timestamp
+                    const lastSaved = localStorage.getItem('last_saved_timestamp');
+                    if (lastSaved) {
+                        this.elements.lastSaved.textContent = new Date(parseInt(lastSaved)).toLocaleTimeString();
+                    }
+
+                    // Check for auto-resume
+                    const savedSession = localStorage.getItem(this.STORAGE_CONFIG.SESSION);
+                    if (savedSession && document.getElementById('autoResume').checked) {
+                        const session = JSON.parse(savedSession);
+                        if (session.active) {
+                            setTimeout(() => {
+                                this.log("Resuming previous session...", 'info');
+                                this.startAutomation();
+                            }, 500);
+                        }
+                    }
+
+                    this.log("All data loaded from persistent storage", 'success');
+                } catch (error) {
+                    console.error("Error loading data:", error);
+                    this.log("Error loading saved data", 'error');
+                }
+            }
+            
+            saveAllData() {
+                if (!this.permissions.storage) return;
+                
+                try {
+                    // Update state from checkboxes
+                    this.state.useIndexedDB = document.getElementById('useIndexedDB').checked;
+                    this.state.useWebWorker = document.getElementById('useWebWorker').checked;
+
+                    // Save to localStorage
+                    localStorage.setItem(this.STORAGE_CONFIG.CLICK_COUNT, this.state.clickCount.toString());
+
+                    // Save settings
+                    const settings = {
+                        clickDelay: document.getElementById('clickDelay').value,
+                        maxClicks: document.getElementById('maxClicks').value,
+                        targetUrl: document.getElementById('targetUrl').value,
+                        openInNewTab: document.getElementById('openInNewTab').value,
+                        autoResume: document.getElementById('autoResume').checked,
+                        saveLogs: document.getElementById('saveLogs').checked,
+                        notifications: document.getElementById('notifications').checked,
+                        randomDelay: document.getElementById('randomDelay').checked,
+                        autoSave: document.getElementById('autoSave').checked,
+                        soundEffects: document.getElementById('soundEffects').checked,
+                        useIndexedDB: this.state.useIndexedDB,
+                        useWebWorker: this.state.useWebWorker,
+                        lastUpdated: new Date().toISOString()
+                    };
+                    localStorage.setItem(this.STORAGE_CONFIG.SETTINGS, JSON.stringify(settings));
+
+                    // Save statistics
+                    const stats = {
+                        totalUptime: this.state.totalUptime,
+                        failedClicks: this.state.failedClicks,
+                        totalClicks: this.state.clickCount,
+                        lastSession: this.state.sessionStartTime || null
+                    };
+                    localStorage.setItem(this.STORAGE_CONFIG.STATS, JSON.stringify(stats));
+
+                    // Save logs if enabled
+                    if (document.getElementById('saveLogs').checked) {
+                        localStorage.setItem(this.STORAGE_CONFIG.LOGS, this.elements.activityLog.innerHTML);
+                    }
+
+                    // Save session state
+                    const session = {
+                        active: this.state.automationActive,
+                        startTime: this.state.sessionStartTime,
+                        clickCount: this.state.clickCount,
+                        lastUpdate: Date.now()
+                    };
+                    localStorage.setItem(this.STORAGE_CONFIG.SESSION, JSON.stringify(session));
+
+                    // Update last saved timestamp
+                    const now = Date.now();
+                    localStorage.setItem('last_saved_timestamp', now.toString());
+                    this.elements.lastSaved.textContent = new Date(now).toLocaleTimeString();
+
+                    this.updateStorageInfo();
+                    this.showDataStatus('Data saved successfully', 'success');
+                } catch (error) {
+                    console.error("Error saving data:", error);
+                    this.showDataStatus('Error saving data', 'error');
+                }
+            }
+            
+            // ===============================
+            // AUTOMATION METHODS
+            // ===============================
+            
+            performClickOperation() {
+                if (!this.state.automationActive || !this.permissions.automation) return;
+                
+                const maxClicks = parseInt(document.getElementById('maxClicks').value);
+                
+                // Check if we've reached max clicks
+                if (maxClicks > 0 && this.state.clickCount >= maxClicks) {
+                    this.log("Maximum clicks reached. Automation stopped.", 'info');
+                    this.stopAutomation();
+                    return;
+                }
+                
+                try {
+                    // Update link before clicking
+                    this.updateTargetLink();
+                    
+                    // Simulate click
+                    const event = new MouseEvent('click', {
+                        view: window,
+                        bubbles: true,
+                        cancelable: true
+                    });
+                    
+                    this.elements.testLink.dispatchEvent(event);
+                    this.state.clickCount++;
+                    this.elements.totalClicks.textContent = this.state.clickCount;
+                    this.state.lastClickTime = Date.now();
+                    
+                    // Show notification if enabled and permitted
+                    if (document.getElementById('notifications').checked && this.permissions.notifications) {
+                        this.showNotification(`Click #${this.state.clickCount} simulated`);
+                    }
+                    
+                    this.log(`Click #${this.state.clickCount} simulated. Opening: ${this.elements.testLink.href}`, 'success');
+                    
+                    // Save progress if storage is permitted
+                    if (this.permissions.storage) {
+                        this.saveAllData();
+                    }
+                    
+                } catch (error) {
+                    this.state.failedClicks++;
+                    this.log(`Error on click #${this.state.clickCount + 1}: ${error.message}`, 'error');
+                    this.updateStatistics();
+                }
+            }
+            
+            startAutomation() {
+                if (this.state.automationActive || !this.permissions.automation) return;
+                
+                this.state.automationActive = true;
+                this.state.sessionStartTime = Date.now();
+                
+                // Update health status
+                this.elements.healthStatus.textContent = "RUNNING";
+                this.elements.healthStatus.style.color = "#68d391";
+                
+                // Update UI
+                this.elements.startBtn.disabled = true;
+                this.elements.stopBtn.disabled = false;
+                this.elements.status.innerHTML = '<span class="status-indicator status-running"></span> Running';
+                this.elements.status.style.color = '#48bb78';
+                
+                this.log("Automation started successfully", 'success');
+                
+                // Start session timer
+                this.state.sessionInterval = setInterval(() => this.updateSessionTimer(), 1000);
+                
+                // Save session state if storage is permitted
+                if (this.permissions.storage) {
+                    this.saveAllData();
+                }
+                
+                // Show notification if enabled and permitted
+                if (document.getElementById('notifications').checked && this.permissions.notifications) {
+                    this.showNotification("Automation started");
+                }
+                
+                // Start automation based on selected method
+                if (this.state.useWebWorker && this.worker) {
+                    const delay = parseFloat(document.getElementById('clickDelay').value) * 1000;
+                    this.worker.postMessage({ cmd: "start", delay: delay });
+                    this.log("Web Worker timer started", 'success');
+                } else {
+                    // Use traditional setTimeout method
+                    const initialDelay = 2000;
+                    this.state.automationTimeout = setTimeout(() => {
+                        const runClick = () => {
+                            if (!this.state.automationActive) return;
+                            
+                            this.performClickOperation();
+                            
+                            // Calculate next delay
+                            let delay = parseFloat(document.getElementById('clickDelay').value) * 1000;
+                            if (document.getElementById('randomDelay').checked) {
+                                const variation = delay * 0.1;
+                                delay += (Math.random() * variation * 2) - variation;
+                            }
+                            
+                            // Schedule next click
+                            if (this.state.automationActive) {
+                                this.state.automationTimeout = setTimeout(runClick, delay);
+                            }
+                        };
+                        runClick();
+                    }, initialDelay);
+                }
+            }
+            
+            stopAutomation() {
+                if (!this.state.automationActive) return;
+                
+                this.state.automationActive = false;
+                
+                // Update health status
+                this.elements.healthStatus.textContent = "STOPPED";
+                this.elements.healthStatus.style.color = "#f56565";
+                
+                // Calculate and save total uptime
+                if (this.state.sessionStartTime) {
+                    const sessionUptime = Math.floor((Date.now() - this.state.sessionStartTime) / 1000);
+                    this.state.totalUptime += sessionUptime;
+                    this.state.sessionStartTime = null;
+                }
+                
+                // Stop timer based on method
+                if (this.state.useWebWorker && this.worker) {
+                    this.worker.postMessage({ cmd: "stop" });
+                } else {
+                    if (this.state.automationTimeout) {
+                        clearTimeout(this.state.automationTimeout);
+                        this.state.automationTimeout = null;
+                    }
+                }
+                
+                if (this.state.sessionInterval) {
+                    clearInterval(this.state.sessionInterval);
+                    this.state.sessionInterval = null;
+                }
+                
+                // Update UI
+                this.elements.startBtn.disabled = false;
+                this.elements.stopBtn.disabled = true;
+                this.elements.status.innerHTML = '<span class="status-indicator status-stopped"></span> Stopped';
+                this.elements.status.style.color = '#f56565';
+                
+                // Update statistics
+                this.updateStatistics();
+                
+                this.log("Automation stopped", 'info');
+                
+                // Save final state if storage is permitted
+                if (this.permissions.storage) {
+                    this.saveAllData();
+                }
+                
+                // Show notification if enabled and permitted
+                if (document.getElementById('notifications').checked && this.permissions.notifications) {
+                    this.showNotification("Automation stopped");
+                }
+            }
+            
+            // ===============================
+            // HELPER METHODS
+            // ===============================
+            
+            updateTargetLink() {
+                const url = document.getElementById('targetUrl').value;
+                const target = document.getElementById('openInNewTab').value;
+                
+                this.elements.testLink.href = url;
+                this.elements.testLink.target = target;
+                
+                const targetText = target === '_blank' ? 'New Tab' : 
+                                 target === '_self' ? 'Same Tab' : 'Parent Frame';
+                this.elements.linkTargetPreview.textContent = targetText;
+                
+                if (document.getElementById('autoSave').checked && this.permissions.storage) {
+                    this.saveAllData();
+                }
+            }
+            
+            updateSessionTimer() {
+                if (this.state.sessionStartTime) {
+                    const elapsed = Math.floor((Date.now() - this.state.sessionStartTime) / 1000);
+                    this.elements.sessionTime.textContent = `${elapsed}s`;
+                    
+                    const totalUptime = this.state.totalUptime + elapsed;
+                    const hours = Math.floor(totalUptime / 3600);
+                    const minutes = Math.floor((totalUptime % 3600) / 60);
+                    const seconds = totalUptime % 60;
+                    this.elements.uptime.textContent = `Uptime: ${hours}h ${minutes}m ${seconds}s`;
+                }
+            }
+            
+            updateStatistics() {
+                const totalAttempts = this.state.clickCount + this.state.failedClicks;
+                const successRate = totalAttempts > 0 ? 
+                    Math.round((this.state.clickCount / totalAttempts) * 100) : 100;
+                this.elements.successRate.textContent = `${successRate}%`;
+                this.elements.failedClicks.textContent = `Failed: ${this.state.failedClicks}`;
+                
+                const totalTime = this.state.totalUptime;
+                const hours = Math.floor(totalTime / 3600);
+                const minutes = Math.floor((totalTime % 3600) / 60);
+                this.elements.totalTime.textContent = `Total: ${hours}h ${minutes}m`;
+            }
+            
+            resetStats() {
+                if (confirm("Are you sure you want to reset all statistics? This cannot be undone.")) {
+                    this.state.clickCount = 0;
+                    this.state.failedClicks = 0;
+                    this.state.totalUptime = 0;
+                    
+                    this.elements.totalClicks.textContent = '0';
+                    this.elements.sessionTime.textContent = '0s';
+                    this.elements.uptime.textContent = 'Uptime: 0s';
+                    
+                    if (this.state.automationActive) {
+                        this.stopAutomation();
+                    }
+                    
+                    this.updateStatistics();
+                    
+                    if (this.permissions.storage) {
+                        this.saveAllData();
+                    }
+                    
+                    this.log("All statistics have been reset", 'warning');
+                }
+            }
+            
+            exportData() {
+                const data = {
+                    metadata: {
+                        version: '3.0',
+                        exportDate: new Date().toISOString(),
+                        tool: 'Educational Automation Tool',
+                        permissions: this.permissions
+                    },
+                    statistics: {
+                        clickCount: this.state.clickCount,
+                        failedClicks: this.state.failedClicks,
+                        totalUptime: this.state.totalUptime,
+                        lastClick: this.state.lastClickTime ? new Date(this.state.lastClickTime).toISOString() : null
+                    },
+                    settings: {
+                        clickDelay: document.getElementById('clickDelay').value,
+                        maxClicks: document.getElementById('maxClicks').value,
+                        targetUrl: document.getElementById('targetUrl').value,
+                        openInNewTab: document.getElementById('openInNewTab').value,
+                        useIndexedDB: this.state.useIndexedDB,
+                        useWebWorker: this.state.useWebWorker
+                    },
+                    logs: this.elements.activityLog.innerHTML,
+                    session: {
+                        active: this.state.automationActive,
+                        startTime: this.state.sessionStartTime
                     }
                 };
-                req.onsuccess = (e) => {
-                    db = e.target.result;
-                    resolve(db);
+                
+                const dataStr = JSON.stringify(data, null, 2);
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(dataBlob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                const dateStr = new Date().toISOString().split('T')[0];
+                a.download = `automation-backup-${dateStr}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                this.log("Data exported to backup file", 'success');
+                this.showDataStatus('Data exported successfully', 'success');
+            }
+            
+            importData() {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = '.json';
+                
+                input.onchange = (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    const reader = new FileReader();
+                    
+                    reader.onload = (event) => {
+                        try {
+                            const data = JSON.parse(event.target.result);
+                            
+                            if (data.statistics) {
+                                this.state.clickCount = parseInt(data.statistics.clickCount) || 0;
+                                this.state.failedClicks = parseInt(data.statistics.failedClicks) || 0;
+                                this.state.totalUptime = parseInt(data.statistics.totalUptime) || 0;
+                                
+                                this.elements.totalClicks.textContent = this.state.clickCount;
+                                this.updateStatistics();
+                            }
+                            
+                            if (data.settings) {
+                                document.getElementById('clickDelay').value = data.settings.clickDelay || 5;
+                                document.getElementById('maxClicks').value = data.settings.maxClicks || 50;
+                                document.getElementById('targetUrl').value = data.settings.targetUrl || 'https://example.com';
+                                document.getElementById('openInNewTab').value = data.settings.openInNewTab || '_blank';
+                                document.getElementById('useIndexedDB').checked = data.settings.useIndexedDB !== false;
+                                document.getElementById('useWebWorker').checked = data.settings.useWebWorker !== false;
+                                this.state.useIndexedDB = document.getElementById('useIndexedDB').checked;
+                                this.state.useWebWorker = document.getElementById('useWebWorker').checked;
+                                this.updateTargetLink();
+                            }
+                            
+                            if (data.logs) {
+                                this.elements.activityLog.innerHTML = data.logs;
+                            }
+                            
+                            if (this.permissions.storage) {
+                                this.saveAllData();
+                            }
+                            
+                            this.log(`Data imported from backup (${data.metadata?.exportDate || 'unknown date'})`, 'success');
+                            this.showDataStatus('Data imported successfully', 'success');
+                            
+                        } catch (error) {
+                            this.log("Error importing data: Invalid file format", 'error');
+                            this.showDataStatus('Import failed: Invalid file', 'error');
+                        }
+                    };
+                    
+                    reader.readAsText(file);
                 };
-                req.onerror = () => reject("IndexedDB error");
-            });
+                
+                input.click();
+            }
+            
+            clearLogs() {
+                if (confirm("Clear all activity logs?")) {
+                    this.elements.activityLog.innerHTML = '';
+                    
+                    if (this.permissions.storage) {
+                        localStorage.removeItem(this.STORAGE_CONFIG.LOGS);
+                    }
+                    
+                    this.log("All logs cleared", 'warning');
+                }
+            }
+            
+            toggleAdvanced() {
+                const content = document.getElementById('advancedContent');
+                const toggle = document.getElementById('advancedToggle');
+                
+                if (content.style.display === 'none') {
+                    content.style.display = 'grid';
+                    toggle.textContent = '▲';
+                } else {
+                    content.style.display = 'none';
+                    toggle.textContent = '▼';
+                }
+            }
+            
+            startAutoSave() {
+                if (!this.permissions.storage) return;
+                
+                if (this.state.autoSaveInterval) {
+                    clearInterval(this.state.autoSaveInterval);
+                }
+                
+                this.state.autoSaveInterval = setInterval(() => {
+                    if (document.getElementById('autoSave').checked) {
+                        this.saveAllData();
+                        this.showDataStatus('Auto-saved', 'info', 1000);
+                    }
+                }, 30000);
+            }
+            
+            updateStorageInfo() {
+                if (!this.permissions.storage) {
+                    this.elements.storageUsed.textContent = 'N/A (No storage permission)';
+                    return;
+                }
+                
+                let totalSize = 0;
+                for (let key in localStorage) {
+                    if (localStorage.hasOwnProperty(key)) {
+                        totalSize += localStorage[key].length * 2;
+                    }
+                }
+                this.elements.storageUsed.textContent = `${(totalSize / 1024).toFixed(2)} KB`;
+            }
+            
+            startHeartbeat() {
+                setInterval(() => {
+                    this.state.heartbeat++;
+                    this.elements.heartbeat.textContent = this.state.heartbeat;
+                }, 1000);
+            }
+            
+            showNotification(message) {
+                if (!this.permissions.notifications) return;
+                
+                if (Notification.permission === "granted") {
+                    new Notification("Automation Tool", {
+                        body: message,
+                        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2348bb78"><path d="M0 0h24v24H0z" fill="none"/><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>'
+                    });
+                }
+            }
+            
+            // ===============================
+            // EVENT LISTENERS
+            // ===============================
+            
+            setupEventListeners() {
+                // Button listeners
+                this.elements.startBtn.addEventListener('click', () => this.startAutomation());
+                this.elements.stopBtn.addEventListener('click', () => this.stopAutomation());
+                document.getElementById('resetBtn').addEventListener('click', () => this.resetStats());
+                document.getElementById('exportBtn').addEventListener('click', () => this.exportData());
+                document.getElementById('importBtn').addEventListener('click', () => this.importData());
+                document.getElementById('clearLogsBtn').addEventListener('click', () => this.clearLogs());
+                
+                // Advanced settings toggle
+                document.getElementById('advancedHeader').addEventListener('click', () => this.toggleAdvanced());
+                
+                // Settings change listeners
+                document.getElementById('targetUrl').addEventListener('input', () => this.updateTargetLink());
+                document.getElementById('openInNewTab').addEventListener('change', () => this.updateTargetLink());
+                
+                document.getElementById('clickDelay').addEventListener('change', function() {
+                    this.log(`Click delay changed to ${this.value} seconds`, 'info');
+                    if (this.permissions.storage) {
+                        this.saveAllData();
+                    }
+                }.bind(this));
+                
+                document.getElementById('maxClicks').addEventListener('change', function() {
+                    this.log(`Maximum clicks changed to ${this.value}`, 'info');
+                    if (this.permissions.storage) {
+                        this.saveAllData();
+                    }
+                }.bind(this));
+                
+                document.getElementById('autoSave').addEventListener('change', function() {
+                    if (this.checked && this.permissions.storage) {
+                        this.startAutoSave();
+                        this.showDataStatus('Auto-save enabled', 'success');
+                    } else {
+                        clearInterval(this.state.autoSaveInterval);
+                        this.showDataStatus('Auto-save disabled', 'warning');
+                    }
+                    if (this.permissions.storage) {
+                        this.saveAllData();
+                    }
+                }.bind(this));
+                
+                document.getElementById('useIndexedDB').addEventListener('change', function() {
+                    this.state.useIndexedDB = this.checked;
+                    this.log(`IndexedDB ${this.checked ? 'enabled' : 'disabled'}`, 'info');
+                    if (this.permissions.storage) {
+                        this.saveAllData();
+                    }
+                }.bind(this));
+                
+                document.getElementById('useWebWorker').addEventListener('change', function() {
+                    this.state.useWebWorker = this.checked;
+                    this.log(`Web Worker ${this.checked ? 'enabled' : 'disabled'}`, 'info');
+                    if (this.permissions.storage) {
+                        this.saveAllData();
+                    }
+                }.bind(this));
+                
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (e) => {
+                    if (e.code === 'Space' && !e.target.matches('input, textarea, select')) {
+                        e.preventDefault();
+                        if (this.state.automationActive) {
+                            this.stopAutomation();
+                        } else {
+                            this.startAutomation();
+                        }
+                    }
+                    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                        e.preventDefault();
+                        this.startAutomation();
+                    }
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                        e.preventDefault();
+                        this.stopAutomation();
+                    }
+                    if (e.key === 'Escape') {
+                        this.stopAutomation();
+                    }
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+                        e.preventDefault();
+                        this.exportData();
+                    }
+                });
+                
+                // Visibility change
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden && this.state.automationActive) {
+                        this.log("Browser tab hidden - automation continues in background", 'info');
+                    }
+                });
+                
+                // Before unload
+                window.addEventListener('beforeunload', (e) => {
+                    if (this.state.automationActive) {
+                        e.preventDefault();
+                        e.returnValue = 'Automation is still running. Are you sure you want to leave?';
+                        return e.returnValue;
+                    }
+                });
+            }
         }
-
-        async function idbSet(key, value) {
-            if (!db) return;
-            return new Promise((resolve) => {
-                const tx = db.transaction("state", "readwrite");
-                tx.objectStore("state").put({ key, value });
-                tx.oncomplete = () => resolve(true);
-                tx.onerror = () => resolve(false);
-            });
-        }
-
-        async function idbGet(key) {
-            if (!db) return null;
-            return new Promise((resolve) => {
-                const tx = db.transaction("state", "readonly");
-                const req = tx.objectStore("state").get(key);
-                req.onsuccess = () => resolve(req.result ? req.result.value : null);
-                req.onerror = () => resolve(null);
-            });
-        }
-
-        // ===============================
-        // EXISTING STORAGE CONFIGURATION
-        // ===============================
-        const STORAGE_CONFIG = {
-            CLICK_COUNT: 'automation_clicks_v2',
-            SETTINGS: 'automation_settings_v2',
-            LOGS: 'automation_logs_v2',
-            SESSION: 'automation_session_v2',
-            STATS: 'automation_stats_v2',
-            HISTORY: 'automation_history_v2'
-        };
-
-        // ===============================
-        // APPLICATION STATE
-        // ===============================
-        let state = {
-            clickCount: 0,
-            automationActive: false,
-            automationTimeout: null,
-            sessionStartTime: null,
-            sessionInterval: null,
-            totalUptime: 0,
-            failedClicks: 0,
-            lastClickTime: null,
-            autoSaveInterval: null,
-            heartbeat: 0,
-            useIndexedDB: true,
-            useWebWorker: true
-        };
-
-        // ===============================
-        // DOM ELEMENTS
-        // ===============================
-        const elements = {
-            totalClicks: document.getElementById('totalClicks'),
-            status: document.getElementById('status'),
-            sessionTime: document.getElementById('sessionTime'),
-            activityLog: document.getElementById('activityLog'),
-            startBtn: document.getElementById('startBtn'),
-            stopBtn: document.getElementById('stopBtn'),
-            testLink: document.getElementById('testLink'),
-            savedClicks: document.getElementById('savedClicks'),
-            uptime: document.getElementById('uptime'),
-            totalTime: document.getElementById('totalTime'),
-            successRate: document.getElementById('successRate'),
-            failedClicks: document.getElementById('failedClicks'),
-            lastSaved: document.getElementById('lastSaved'),
-            storageUsed: document.getElementById('storageUsed'),
-            dataStatus: document.getElementById('dataStatus'),
-            linkTargetPreview: document.getElementById('linkTargetPreview'),
-            dbStatus: document.getElementById('dbStatus'),
-            healthStatus: document.getElementById('healthStatus'),
-            heartbeat: document.getElementById('heartbeat')
-        };
 
         // ===============================
         // INITIALIZATION
         // ===============================
-        initApplication();
+        let automationTool;
 
-        async function initApplication() {
-            try {
-                await openDB();
-                elements.dbStatus.textContent = "IndexedDB Ready";
-                elements.dbStatus.style.color = "#68d391";
-            } catch (error) {
-                elements.dbStatus.textContent = "Using localStorage";
-                elements.dbStatus.style.color = "#f56565";
-            }
-            
-            loadAllData();
-            updateTargetLink();
-            setupEventListeners();
-            startAutoSave();
-            updateStorageInfo();
-            startHeartbeat();
-            
-            // Set up Web Worker message handler
-            worker.onmessage = function(e) {
-                if (e.data === "tick" && state.automationActive) {
-                    performClickOperation();
-                }
-            };
-            
-            logActivity("Application loaded successfully", 'success');
-            showDataStatus('System ready with Web Worker & IndexedDB', 'success');
-        }
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            automationTool = new AutomationTool();
+        });
 
-        // ===============================
-        // HEARTBEAT FUNCTION
-        // ===============================
-        function startHeartbeat() {
-            setInterval(() => {
-                state.heartbeat++;
-                elements.heartbeat.textContent = state.heartbeat;
-            }, 1000);
-        }
-
-        // ===============================
-        // EXISTING FUNCTIONS WITH UPDATES
-        // ===============================
-        function loadAllData() {
-            try {
-                // Load click count
-                const savedClicks = localStorage.getItem(STORAGE_CONFIG.CLICK_COUNT);
-                if (savedClicks) {
-                    state.clickCount = parseInt(savedClicks);
-                    elements.totalClicks.textContent = state.clickCount;
-                    elements.savedClicks.textContent = `(Saved: ${state.clickCount})`;
-                }
-
-                // Load settings
-                const savedSettings = localStorage.getItem(STORAGE_CONFIG.SETTINGS);
-                if (savedSettings) {
-                    const settings = JSON.parse(savedSettings);
-                    document.getElementById('clickDelay').value = settings.clickDelay || 5;
-                    document.getElementById('maxClicks').value = settings.maxClicks || 50;
-                    document.getElementById('targetUrl').value = settings.targetUrl || 'https://example.com';
-                    document.getElementById('openInNewTab').value = settings.openInNewTab || '_blank';
-                    document.getElementById('autoResume').checked = settings.autoResume !== false;
-                    document.getElementById('saveLogs').checked = settings.saveLogs !== false;
-                    document.getElementById('notifications').checked = settings.notifications !== false;
-                    document.getElementById('randomDelay').checked = settings.randomDelay !== false;
-                    document.getElementById('autoSave').checked = settings.autoSave !== false;
-                    document.getElementById('soundEffects').checked = settings.soundEffects || false;
-                    document.getElementById('useIndexedDB').checked = settings.useIndexedDB !== false;
-                    document.getElementById('useWebWorker').checked = settings.useWebWorker !== false;
-                    
-                    state.useIndexedDB = document.getElementById('useIndexedDB').checked;
-                    state.useWebWorker = document.getElementById('useWebWorker').checked;
-                }
-
-                // Load statistics
-                const savedStats = localStorage.getItem(STORAGE_CONFIG.STATS);
-                if (savedStats) {
-                    const stats = JSON.parse(savedStats);
-                    state.totalUptime = stats.totalUptime || 0;
-                    state.failedClicks = stats.failedClicks || 0;
-                    updateStatistics();
-                }
-
-                // Load logs if enabled
-                if (document.getElementById('saveLogs').checked) {
-                    const savedLogs = localStorage.getItem(STORAGE_CONFIG.LOGS);
-                    if (savedLogs) {
-                        elements.activityLog.innerHTML = savedLogs;
-                    }
-                }
-
-                // Load last saved timestamp
-                const lastSaved = localStorage.getItem('last_saved_timestamp');
-                if (lastSaved) {
-                    elements.lastSaved.textContent = new Date(parseInt(lastSaved)).toLocaleTimeString();
-                }
-
-                // Check for auto-resume
-                const savedSession = localStorage.getItem(STORAGE_CONFIG.SESSION);
-                if (savedSession && document.getElementById('autoResume').checked) {
-                    const session = JSON.parse(savedSession);
-                    if (session.active) {
-                        setTimeout(() => {
-                            logActivity("Resuming previous session...", 'info');
-                            startAutomation();
-                        }, 500);
-                    }
-                }
-
-                // Try to load from IndexedDB
-                if (state.useIndexedDB && db) {
-                    idbGet("clicks").then(savedClicks => {
-                        if (savedClicks) {
-                            state.clickCount = parseInt(savedClicks);
-                            elements.totalClicks.textContent = state.clickCount;
-                            elements.savedClicks.textContent = `(Saved: ${state.clickCount})`;
-                        }
-                    });
-                }
-
-                logActivity("All data loaded from persistent storage", 'success');
-            } catch (error) {
-                console.error("Error loading data:", error);
-                logActivity("Error loading saved data", 'error');
-            }
-        }
-
-        function saveAllData() {
-            try {
-                // Update state from checkboxes
-                state.useIndexedDB = document.getElementById('useIndexedDB').checked;
-                state.useWebWorker = document.getElementById('useWebWorker').checked;
-
-                // Save to IndexedDB if enabled
-                if (state.useIndexedDB && db) {
-                    idbSet("clicks", state.clickCount);
-                }
-
-                // Save to localStorage
-                localStorage.setItem(STORAGE_CONFIG.CLICK_COUNT, state.clickCount.toString());
-
-                // Save settings
-                const settings = {
-                    clickDelay: document.getElementById('clickDelay').value,
-                    maxClicks: document.getElementById('maxClicks').value,
-                    targetUrl: document.getElementById('targetUrl').value,
-                    openInNewTab: document.getElementById('openInNewTab').value,
-                    autoResume: document.getElementById('autoResume').checked,
-                    saveLogs: document.getElementById('saveLogs').checked,
-                    notifications: document.getElementById('notifications').checked,
-                    randomDelay: document.getElementById('randomDelay').checked,
-                    autoSave: document.getElementById('autoSave').checked,
-                    soundEffects: document.getElementById('soundEffects').checked,
-                    useIndexedDB: state.useIndexedDB,
-                    useWebWorker: state.useWebWorker,
-                    lastUpdated: new Date().toISOString()
-                };
-                localStorage.setItem(STORAGE_CONFIG.SETTINGS, JSON.stringify(settings));
-
-                // Save statistics
-                const stats = {
-                    totalUptime: state.totalUptime,
-                    failedClicks: state.failedClicks,
-                    totalClicks: state.clickCount,
-                    lastSession: state.sessionStartTime || null
-                };
-                localStorage.setItem(STORAGE_CONFIG.STATS, JSON.stringify(stats));
-
-                // Save logs if enabled
-                if (document.getElementById('saveLogs').checked) {
-                    localStorage.setItem(STORAGE_CONFIG.LOGS, elements.activityLog.innerHTML);
-                }
-
-                // Save session state
-                const session = {
-                    active: state.automationActive,
-                    startTime: state.sessionStartTime,
-                    clickCount: state.clickCount,
-                    lastUpdate: Date.now()
-                };
-                localStorage.setItem(STORAGE_CONFIG.SESSION, JSON.stringify(session));
-
-                // Update last saved timestamp
-                const now = Date.now();
-                localStorage.setItem('last_saved_timestamp', now.toString());
-                elements.lastSaved.textContent = new Date(now).toLocaleTimeString();
-
-                updateStorageInfo();
-                showDataStatus('Data saved successfully', 'success');
-            } catch (error) {
-                console.error("Error saving data:", error);
-                showDataStatus('Error saving data', 'error');
-            }
-        }
-
-        // ===============================
-        // CLICK OPERATION FUNCTION
-        // ===============================
-        function performClickOperation() {
-            if (!state.automationActive) return;
-            
-            const maxClicks = parseInt(document.getElementById('maxClicks').value);
-            
-            // Check if we've reached max clicks
-            if (maxClicks > 0 && state.clickCount >= maxClicks) {
-                logActivity("Maximum clicks reached. Automation stopped.", 'info');
-                stopAutomation();
-                return;
-            }
-            
-            try {
-                // Update link before clicking
-                updateTargetLink();
-                
-                // Simulate click
-                const event = new MouseEvent('click', {
-                    view: window,
-                    bubbles: true,
-                    cancelable: true
-                });
-                
-                elements.testLink.dispatchEvent(event);
-                state.clickCount++;
-                elements.totalClicks.textContent = state.clickCount;
-                state.lastClickTime = Date.now();
-                
-                // Show notification if enabled
-                if (document.getElementById('notifications').checked) {
-                    showNotification(`Click #${state.clickCount} simulated`);
-                }
-                
-                logActivity(`Click #${state.clickCount} simulated. Opening: ${elements.testLink.href}`, 'success');
-                
-                // Play sound if enabled
-                if (document.getElementById('soundEffects').checked) {
-                    playSound('click');
-                }
-                
-                // Save progress
-                saveAllData();
-                
-            } catch (error) {
-                state.failedClicks++;
-                logActivity(`Error on click #${state.clickCount + 1}: ${error.message}`, 'error');
-                updateStatistics();
-            }
-        }
-
-        // ===============================
-        // AUTOMATION CONTROL
-        // ===============================
-        function startAutomation() {
-            if (state.automationActive) return;
-            
-            state.automationActive = true;
-            state.sessionStartTime = Date.now();
-            
-            // Update health status
-            elements.healthStatus.textContent = "RUNNING";
-            elements.healthStatus.style.color = "#68d391";
-            
-            // Update UI
-            elements.startBtn.disabled = true;
-            elements.stopBtn.disabled = false;
-            elements.status.innerHTML = '<span class="status-indicator status-running"></span> Running';
-            elements.status.style.color = '#48bb78';
-            
-            logActivity("Automation started successfully", 'success');
-            
-            // Start session timer
-            state.sessionInterval = setInterval(updateSessionTimer, 1000);
-            
-            // Save session state
-            saveAllData();
-            
-            // Show notification if enabled
-            if (document.getElementById('notifications').checked) {
-                showNotification("Automation started");
-            }
-            
-            // Start automation based on selected method
-            if (state.useWebWorker) {
-                const delay = parseFloat(document.getElementById('clickDelay').value) * 1000;
-                worker.postMessage({ cmd: "start", delay: delay });
-                logActivity("Web Worker timer started", 'success');
-            } else {
-                // Use traditional setTimeout method
-                const initialDelay = 2000;
-                state.automationTimeout = setTimeout(function runClick() {
-                    if (!state.automationActive) return;
-                    
-                    performClickOperation();
-                    
-                    // Calculate next delay
-                    let delay = parseFloat(document.getElementById('clickDelay').value) * 1000;
-                    if (document.getElementById('randomDelay').checked) {
-                        const variation = delay * 0.1;
-                        delay += (Math.random() * variation * 2) - variation;
-                    }
-                    
-                    // Schedule next click
-                    if (state.automationActive) {
-                        state.automationTimeout = setTimeout(runClick, delay);
-                    }
-                }, initialDelay);
-            }
-        }
-
-        function stopAutomation() {
-            if (!state.automationActive) return;
-            
-            state.automationActive = false;
-            
-            // Update health status
-            elements.healthStatus.textContent = "STOPPED";
-            elements.healthStatus.style.color = "#f56565";
-            
-            // Calculate and save total uptime
-            if (state.sessionStartTime) {
-                const sessionUptime = Math.floor((Date.now() - state.sessionStartTime) / 1000);
-                state.totalUptime += sessionUptime;
-                state.sessionStartTime = null;
-            }
-            
-            // Stop timer based on method
-            if (state.useWebWorker) {
-                worker.postMessage({ cmd: "stop" });
-            } else {
-                if (state.automationTimeout) {
-                    clearTimeout(state.automationTimeout);
-                    state.automationTimeout = null;
-                }
-            }
-            
-            if (state.sessionInterval) {
-                clearInterval(state.sessionInterval);
-                state.sessionInterval = null;
-            }
-            
-            // Update UI
-            elements.startBtn.disabled = false;
-            elements.stopBtn.disabled = true;
-            elements.status.innerHTML = '<span class="status-indicator status-stopped"></span> Stopped';
-            elements.status.style.color = '#f56565';
-            
-            // Update statistics
-            updateStatistics();
-            
-            logActivity("Automation stopped", 'info');
-            
-            // Save final state
-            saveAllData();
-            
-            // Show notification if enabled
-            if (document.getElementById('notifications').checked) {
-                showNotification("Automation stopped");
-            }
-        }
-
-        // ===============================
-        // EXISTING HELPER FUNCTIONS
-        // ===============================
-        function updateTargetLink() {
-            const url = document.getElementById('targetUrl').value;
-            const target = document.getElementById('openInNewTab').value;
-            
-            elements.testLink.href = url;
-            elements.testLink.target = target;
-            
-            const targetText = target === '_blank' ? 'New Tab' : 
-                             target === '_self' ? 'Same Tab' : 'Parent Frame';
-            elements.linkTargetPreview.textContent = targetText;
-            
-            if (document.getElementById('autoSave').checked) {
-                saveAllData();
-            }
-        }
-
-        function logActivity(message, type = 'info') {
-            const timestamp = new Date().toLocaleTimeString();
-            const logEntry = document.createElement('div');
-            logEntry.className = 'log-entry';
-            
-            const typeText = type.charAt(0).toUpperCase() + type.slice(1);
-            logEntry.innerHTML = `
-                <span class="log-time">${timestamp}</span>
-                <span class="log-type log-type-${type}">${typeText}</span>
-                <span class="log-message">${message}</span>
-            `;
-            
-            elements.activityLog.prepend(logEntry);
-            
-            if (elements.activityLog.children.length > 100) {
-                elements.activityLog.removeChild(elements.activityLog.lastChild);
-            }
-            
-            if (document.getElementById('soundEffects').checked && type === 'error') {
-                playSound('error');
-            }
-            
-            if (document.getElementById('saveLogs').checked && document.getElementById('autoSave').checked) {
-                localStorage.setItem(STORAGE_CONFIG.LOGS, elements.activityLog.innerHTML);
-            }
-        }
-
-        function updateSessionTimer() {
-            if (state.sessionStartTime) {
-                const elapsed = Math.floor((Date.now() - state.sessionStartTime) / 1000);
-                elements.sessionTime.textContent = `${elapsed}s`;
-                
-                const totalUptime = state.totalUptime + elapsed;
-                const hours = Math.floor(totalUptime / 3600);
-                const minutes = Math.floor((totalUptime % 3600) / 60);
-                const seconds = totalUptime % 60;
-                elements.uptime.textContent = `Uptime: ${hours}h ${minutes}m ${seconds}s`;
-            }
-        }
-
-        function updateStatistics() {
-            const totalAttempts = state.clickCount + state.failedClicks;
-            const successRate = totalAttempts > 0 ? 
-                Math.round((state.clickCount / totalAttempts) * 100) : 100;
-            elements.successRate.textContent = `${successRate}%`;
-            elements.failedClicks.textContent = `Failed: ${state.failedClicks}`;
-            
-            const totalTime = state.totalUptime;
-            const hours = Math.floor(totalTime / 3600);
-            const minutes = Math.floor((totalTime % 3600) / 60);
-            elements.totalTime.textContent = `Total: ${hours}h ${minutes}m`;
-        }
-
-        function resetStats() {
-            if (confirm("Are you sure you want to reset all statistics? This cannot be undone.")) {
-                state.clickCount = 0;
-                state.failedClicks = 0;
-                state.totalUptime = 0;
-                
-                elements.totalClicks.textContent = '0';
-                elements.sessionTime.textContent = '0s';
-                elements.uptime.textContent = 'Uptime: 0s';
-                
-                if (state.automationActive) {
-                    stopAutomation();
-                }
-                
-                updateStatistics();
-                saveAllData();
-                logActivity("All statistics have been reset", 'warning');
-            }
-        }
-
-        function exportData() {
-            const data = {
-                metadata: {
-                    version: '2.0',
-                    exportDate: new Date().toISOString(),
-                    tool: 'Educational Automation Tool',
-                    features: ['IndexedDB', 'WebWorker']
-                },
-                statistics: {
-                    clickCount: state.clickCount,
-                    failedClicks: state.failedClicks,
-                    totalUptime: state.totalUptime,
-                    lastClick: state.lastClickTime ? new Date(state.lastClickTime).toISOString() : null
-                },
-                settings: {
-                    clickDelay: document.getElementById('clickDelay').value,
-                    maxClicks: document.getElementById('maxClicks').value,
-                    targetUrl: document.getElementById('targetUrl').value,
-                    openInNewTab: document.getElementById('openInNewTab').value,
-                    useIndexedDB: state.useIndexedDB,
-                    useWebWorker: state.useWebWorker
-                },
-                logs: elements.activityLog.innerHTML,
-                session: {
-                    active: state.automationActive,
-                    startTime: state.sessionStartTime
-                }
-            };
-            
-            const dataStr = JSON.stringify(data, null, 2);
-            const dataBlob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(dataBlob);
-            
-            const a = document.createElement('a');
-            a.href = url;
-            const dateStr = new Date().toISOString().split('T')[0];
-            a.download = `automation-backup-${dateStr}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            logActivity("Data exported to backup file", 'success');
-            showDataStatus('Data exported successfully', 'success');
-        }
-
-        function importData() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.json';
-            
-            input.onchange = function(e) {
-                const file = e.target.files[0];
-                if (!file) return;
-                
-                const reader = new FileReader();
-                
-                reader.onload = function(event) {
-                    try {
-                        const data = JSON.parse(event.target.result);
-                        
-                        if (data.statistics) {
-                            state.clickCount = parseInt(data.statistics.clickCount) || 0;
-                            state.failedClicks = parseInt(data.statistics.failedClicks) || 0;
-                            state.totalUptime = parseInt(data.statistics.totalUptime) || 0;
-                            
-                            elements.totalClicks.textContent = state.clickCount;
-                            updateStatistics();
-                        }
-                        
-                        if (data.settings) {
-                            document.getElementById('clickDelay').value = data.settings.clickDelay || 5;
-                            document.getElementById('maxClicks').value = data.settings.maxClicks || 50;
-                            document.getElementById('targetUrl').value = data.settings.targetUrl || 'https://example.com';
-                            document.getElementById('openInNewTab').value = data.settings.openInNewTab || '_blank';
-                            document.getElementById('useIndexedDB').checked = data.settings.useIndexedDB !== false;
-                            document.getElementById('useWebWorker').checked = data.settings.useWebWorker !== false;
-                            state.useIndexedDB = document.getElementById('useIndexedDB').checked;
-                            state.useWebWorker = document.getElementById('useWebWorker').checked;
-                            updateTargetLink();
-                        }
-                        
-                        if (data.logs) {
-                            elements.activityLog.innerHTML = data.logs;
-                        }
-                        
-                        saveAllData();
-                        logActivity(`Data imported from backup (${data.metadata?.exportDate || 'unknown date'})`, 'success');
-                        showDataStatus('Data imported successfully', 'success');
-                        
-                    } catch (error) {
-                        logActivity("Error importing data: Invalid file format", 'error');
-                        showDataStatus('Import failed: Invalid file', 'error');
-                    }
-                };
-                
-                reader.readAsText(file);
-            };
-            
-            input.click();
-        }
-
-        function clearLogs() {
-            if (confirm("Clear all activity logs?")) {
-                elements.activityLog.innerHTML = '';
-                localStorage.removeItem(STORAGE_CONFIG.LOGS);
-                logActivity("All logs cleared", 'warning');
-            }
-        }
-
-        function toggleAdvanced() {
-            const content = document.getElementById('advancedContent');
-            const toggle = document.getElementById('advancedToggle');
-            
-            if (content.style.display === 'none') {
-                content.style.display = 'grid';
-                toggle.textContent = '▲';
-            } else {
-                content.style.display = 'none';
-                toggle.textContent = '▼';
-            }
-        }
-
-        function startAutoSave() {
-            if (state.autoSaveInterval) {
-                clearInterval(state.autoSaveInterval);
-            }
-            
-            state.autoSaveInterval = setInterval(() => {
-                if (document.getElementById('autoSave').checked) {
-                    saveAllData();
-                    showDataStatus('Auto-saved', 'info', 1000);
-                }
-            }, 30000);
-        }
-
-        function updateStorageInfo() {
-            let totalSize = 0;
-            for (let key in localStorage) {
-                if (localStorage.hasOwnProperty(key)) {
-                    totalSize += localStorage[key].length * 2;
-                }
-            }
-            elements.storageUsed.textContent = `${(totalSize / 1024).toFixed(2)} KB`;
-        }
-
-        function showDataStatus(message, type = 'info', duration = 3000) {
-            elements.dataStatus.textContent = message;
-            elements.dataStatus.style.background = type === 'success' ? '#48bb78' : 
-                                                   type === 'error' ? '#f56565' : 
-                                                   type === 'warning' ? '#ed8936' : '#4299e1';
-            
-            elements.dataStatus.classList.add('show');
-            
-            setTimeout(() => {
-                elements.dataStatus.classList.remove('show');
-            }, duration);
-        }
-
-        function showNotification(message) {
-            if (!("Notification" in window)) return;
-            
-            if (Notification.permission === "granted") {
-                new Notification("Automation Tool", {
-                    body: message,
-                    icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2348bb78"><path d="M0 0h24v24H0z" fill="none"/><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>'
-                });
-            } else if (Notification.permission !== "denied") {
-                Notification.requestPermission();
-            }
-        }
-
-        function playSound(type) {
-            try {
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                
-                if (type === 'click') {
-                    const oscillator = audioContext.createOscillator();
-                    const gainNode = audioContext.createGain();
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    
-                    oscillator.frequency.value = 800;
-                    oscillator.type = 'sine';
-                    
-                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-                    
-                    oscillator.start(audioContext.currentTime);
-                    oscillator.stop(audioContext.currentTime + 0.1);
-                    
-                } else if (type === 'error') {
-                    const oscillator = audioContext.createOscillator();
-                    const gainNode = audioContext.createGain();
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    
-                    oscillator.frequency.value = 300;
-                    oscillator.type = 'sawtooth';
-                    
-                    gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-                    
-                    oscillator.start(audioContext.currentTime);
-                    oscillator.stop(audioContext.currentTime + 0.3);
-                }
-            } catch (error) {
-                console.log("Audio not supported");
-            }
-        }
-
-        function setupEventListeners() {
-            document.getElementById('targetUrl').addEventListener('input', updateTargetLink);
-            document.getElementById('openInNewTab').addEventListener('change', updateTargetLink);
-            
-            document.getElementById('clickDelay').addEventListener('change', function() {
-                logActivity(`Click delay changed to ${this.value} seconds`, 'info');
-                saveAllData();
-            });
-            
-            document.getElementById('maxClicks').addEventListener('change', function() {
-                logActivity(`Maximum clicks changed to ${this.value}`, 'info');
-                saveAllData();
-            });
-            
-            document.getElementById('autoSave').addEventListener('change', function() {
-                if (this.checked) {
-                    startAutoSave();
-                    showDataStatus('Auto-save enabled', 'success');
-                } else {
-                    clearInterval(state.autoSaveInterval);
-                    showDataStatus('Auto-save disabled', 'warning');
-                }
-                saveAllData();
-            });
-            
-            document.getElementById('useIndexedDB').addEventListener('change', function() {
-                state.useIndexedDB = this.checked;
-                logActivity(`IndexedDB ${this.checked ? 'enabled' : 'disabled'}`, 'info');
-                saveAllData();
-            });
-            
-            document.getElementById('useWebWorker').addEventListener('change', function() {
-                state.useWebWorker = this.checked;
-                logActivity(`Web Worker ${this.checked ? 'enabled' : 'disabled'}`, 'info');
-                saveAllData();
-            });
-            
-            document.addEventListener('keydown', function(e) {
-                if (e.code === 'Space' && !e.target.matches('input, textarea, select')) {
-                    e.preventDefault();
-                    if (state.automationActive) {
-                        stopAutomation();
-                    } else {
-                        startAutomation();
-                    }
-                }
-                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-                    e.preventDefault();
-                    startAutomation();
-                }
-                if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
-                    e.preventDefault();
-                    stopAutomation();
-                }
-                if (e.key === 'Escape') {
-                    stopAutomation();
-                }
-                if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
-                    e.preventDefault();
-                    exportData();
-                }
-            });
-            
-            document.addEventListener('visibilitychange', function() {
-                if (document.hidden && state.automationActive) {
-                    logActivity("Browser tab hidden - automation continues in background", 'info');
-                }
-            });
-            
-            window.addEventListener('beforeunload', function(e) {
-                if (state.automationActive) {
-                    e.preventDefault();
-                    e.returnValue = 'Automation is still running. Are you sure you want to leave?';
-                    return e.returnValue;
-                }
-            });
-        }
-
-        // Initial log entry
-        logActivity("Advanced Automation Tool initialized with Web Worker & IndexedDB", 'success');
+        // Export for debugging
+        window.AutomationTool = AutomationTool;
     </script>
 </body>
-    </html>
+</html>
